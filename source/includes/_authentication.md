@@ -101,3 +101,61 @@ Parameter | Required | Description
 --------- | ------- | -----------
 code | true | 6-digit confirmation code
 number | true | Phone number of the associated User
+
+## Sign Up
+
+```shell
+curl "...api/v1/signup"
+```
+
+> Successful response:
+
+```json
+{
+  "id": 2,
+  "fname": "Ethan",
+  "lname": "Held",
+  "number": "+12146163710",
+  "address": "123 Some St.",
+  "city": "Los Angeles",
+  "state": "CA",
+  "zip": "90024",
+  "dob": "2000-01-01",
+  "accounts":
+  [
+    "1234",
+    "5678"
+  ],
+  "token": "abc123..."
+}
+```
+
+> Invalid code or phone number:
+
+```json
+{
+  "confirmation": "rejected"
+}
+```
+
+> Other error responses:
+
+```plaintext
+"This call requires a confirmation code"
+"This call requires a name and phone number"
+```
+
+Creates a new User. Accepts a 6-digit confirmation code, a phone number, a first name, and a last name, and, if successful, returns the created User model (or idempotently, the User model corresponding to the phone number if the User already exists) in addition to that user's token.
+
+### HTTP Request
+
+`GET ...api/v1/signup`
+
+### Query Parameters
+
+Parameter | Required | Description
+--------- | ------- | -----------
+code | true | 6-digit confirmation code
+number | true | Phone number of the associated User
+fname | true | The User's first name
+lname | true | The User's last name

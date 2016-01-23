@@ -6,6 +6,7 @@ toc_footers:
 
 includes:
   - authentication
+  - general
   - users
   - accounts
   - banks
