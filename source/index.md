@@ -7,9 +7,6 @@ toc_footers:
 includes:
   - authentication
   - general
-  - users
-  - accounts
-  - banks
   - errors
 
 search: true

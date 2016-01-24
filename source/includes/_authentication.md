@@ -13,7 +13,8 @@ You must replace <code>TOKEN</code> with your personal API key.
 ## Send SMS Confirmation
 
 ```shell
-curl "...api/v1/users"
+curl "...api/v1/confirmation"
+  -d "number=%2b18005555555"
 ```
 
 > Successful response:
@@ -36,7 +37,7 @@ Sends an SMS containing a 6-digit confirmation code to the given phone number.
 
 ### HTTP Request
 
-`GET ...api/v1/confirmation`
+`POST ...api/v1/confirmation`
 
 ### Query Parameters
 
@@ -47,7 +48,7 @@ number | true | The number to send the 6-digit SMS confirmation code to.
 ## Get Token
 
 ```shell
-curl "...api/v1/auth"
+curl -X GET "...api/v1/auth?code=123456&number=%2b18005555555"
 ```
 
 > Successful response:
@@ -57,12 +58,12 @@ curl "...api/v1/auth"
   "id": 2,
   "fname": "Ethan",
   "lname": "Held",
-  "number": "+12146163710",
+  "number": "+18005555555",
   "address": "123 Some St.",
   "city": "Los Angeles",
   "state": "CA",
   "zip": "90024",
-  "dob": "2000-01-01",
+  "dob": "1990-01-01",
   "accounts":
   [
     "1234",
@@ -106,6 +107,7 @@ number | true | Phone number of the associated User
 
 ```shell
 curl "...api/v1/signup"
+  -d "code=123456&number=%2b18005555555&fname=Ethan&lname=Held"
 ```
 
 > Successful response:
@@ -149,7 +151,7 @@ Creates a new User. Accepts a 6-digit confirmation code, a phone number, a first
 
 ### HTTP Request
 
-`GET ...api/v1/signup`
+`POST ...api/v1/signup`
 
 ### Query Parameters
 
