@@ -33,7 +33,7 @@ curl "...api/v1/confirmation"
 }
 ```
 
-Sends an SMS containing a 6-digit confirmation code to the given phone number.
+Sends an SMS containing a 6-digit confirmation code to the given phone number. Note that unlike other calls, this one takes 'number' as a standalone parameter, not like 'user[number]' which is seen whenever a call refers directly to a User model.
 
 ### HTTP Request
 
@@ -69,6 +69,8 @@ curl -X GET "...api/v1/auth?code=123456&number=%2b18005555555"
     "1234",
     "5678"
   ],
+  "created_at": "2016-01-01T01:00:00.000Z",
+  "updated_at": "2016-01-02T01:00:00.000Z",
   "token": "abc123..."
 }
 ```
@@ -85,7 +87,7 @@ curl -X GET "...api/v1/auth?code=123456&number=%2b18005555555"
 
 ```plaintext
 "This call requires a confirmation code"
-"This call requires a phone number"
+"This call requires a phone number (user[number])"
 ```
 
 Accepts a 6-digit confirmation code and a phone number and, if successful, returns the User model corresponding to the phone number in addition to that user's token.
@@ -101,13 +103,13 @@ Accepts a 6-digit confirmation code and a phone number and, if successful, retur
 Parameter | Required | Description
 --------- | ------- | -----------
 code | true | 6-digit confirmation code
-number | true | Phone number of the associated User
+user[number] | true | Phone number of the associated User
 
 ## Sign Up
 
 ```shell
 curl "...api/v1/signup"
-  -d "code=123456&number=%2b18005555555&fname=Ethan&lname=Held"
+  -d "code=123456&user[number]=%2b18005555555&user[fname]=Ethan&user[lname]=Held"
 ```
 
 > Successful response:
@@ -128,6 +130,8 @@ curl "...api/v1/signup"
     "1234",
     "5678"
   ],
+  "created_at": "2016-01-01T01:00:00.000Z",
+  "updated_at": "2016-01-02T01:00:00.000Z",
   "token": "abc123..."
 }
 ```
@@ -144,7 +148,7 @@ curl "...api/v1/signup"
 
 ```plaintext
 "This call requires a confirmation code"
-"This call requires a name and phone number"
+"This call requires a name (user[fname], user[lname]) and phone number (user[number])"
 ```
 
 Creates a new User. Accepts a 6-digit confirmation code, a phone number, a first name, and a last name, and, if successful, returns the created User model (or idempotently, the User model corresponding to the phone number if the User already exists) in addition to that user's token.
@@ -158,6 +162,6 @@ Creates a new User. Accepts a 6-digit confirmation code, a phone number, a first
 Parameter | Required | Description
 --------- | ------- | -----------
 code | true | 6-digit confirmation code
-number | true | Phone number of the associated User
-fname | true | The User's first name
-lname | true | The User's last name
+user[number] | true | Phone number of the associated User
+user[fname] | true | The User's first name
+user[lname] | true | The User's last name
