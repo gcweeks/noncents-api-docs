@@ -12,21 +12,14 @@ curl "...api/v1/users/me"
 ```json
 {
   "id": 2,
-  "fname": "Ethan",
-  "lname": "Held",
-  "number": "+18001234567",
-  "address": "123 Some St.",
-  "city": "Los Angeles",
-  "state": "CA",
-  "zip": "90000",
+  "fname": "Cash",
+  "lname": "Money",
+  "number": "+15555552016",
   "dob": "1990-01-01",
-  "accounts":
-  [
-    "1234",
-    "5678"
-  ],
-  "created_at": "2016-01-01T01:00:00.000Z",
-  "updated_at": "2016-01-02T01:00:00.000Z"
+  "created_at": "2016-01-01T01:02:03.004Z",
+  "updated_at": "2016-01-02T01:02:03.004Z",
+  "email": "cashmoney@gmail.com",
+  "invest_percent": 10
 }
 ```
 
@@ -51,19 +44,12 @@ curl -X PUT "...api/v1/users/me"
   "id": 2,
   "fname": "New",
   "lname": "Name",
-  "number": "+18001234567",
-  "address": "123 Some St.",
-  "city": "Los Angeles",
-  "state": "CA",
-  "zip": "90000",
+  "number": "+15555552016",
   "dob": "1990-01-01",
-  "accounts":
-  [
-    "1234",
-    "5678"
-  ],
-  "created_at": "2016-01-01T01:00:00.000Z",
-  "updated_at": "2016-01-02T01:00:00.000Z"
+  "created_at": "2016-01-01T01:02:03.004Z",
+  "updated_at": "2016-01-02T01:02:03.004Z",
+  "email": "cashmoney@gmail.com",
+  "invest_percent": 10
 }
 ```
 

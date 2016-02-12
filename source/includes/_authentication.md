@@ -10,106 +10,16 @@ The API expects for the auth token to be included in authenticated API requests 
 You must replace <code>TOKEN</code> with your personal API key.
 </aside>
 
-## Send SMS Confirmation
-
-```shell
-curl "...api/v1/confirmation"
-  -d "number=%2b18005555555"
-```
-
-> Successful response:
-
-```json
-{
-  "confirmation": "sent"
-}
-```
-
-> Invalid phone number:
-
-```json
-{
-  "confirmation": "invalid"
-}
-```
-
-Sends an SMS containing a 6-digit confirmation code to the given phone number. Note that unlike other calls, this one takes 'number' as a standalone parameter, not like 'user[number]' which is seen whenever a call refers directly to a User model.
-
-### HTTP Request
-
-`POST ...api/v1/confirmation`
-
-### Query Parameters
-
-Parameter | Required | Description
---------- | ------- | -----------
-number | true | The number to send the 6-digit SMS confirmation code to.
-
-## Get Token
-
-```shell
-curl -X GET "...api/v1/auth?code=123456&number=%2b18005555555"
-```
-
-> Successful response:
-
-```json
-{
-  "id": 2,
-  "fname": "Ethan",
-  "lname": "Held",
-  "number": "+18005555555",
-  "address": "123 Some St.",
-  "city": "Los Angeles",
-  "state": "CA",
-  "zip": "90024",
-  "dob": "1990-01-01",
-  "accounts":
-  [
-    "1234",
-    "5678"
-  ],
-  "created_at": "2016-01-01T01:00:00.000Z",
-  "updated_at": "2016-01-02T01:00:00.000Z",
-  "token": "abc123..."
-}
-```
-
-> Invalid code or phone number:
-
-```json
-{
-  "confirmation": "rejected"
-}
-```
-
-> Other error responses:
-
-```plaintext
-"This call requires a confirmation code"
-"This call requires a phone number (user[number])"
-```
-
-Accepts a 6-digit confirmation code and a phone number and, if successful, returns the User model corresponding to the phone number in addition to that user's token.
-
-<aside class="warning">If you're not using an administrator API key, note that some calls will return 403 Forbidden if they are hidden for the given user.</aside>
-
-### HTTP Request
-
-`GET ...api/v1/auth`
-
-### Query Parameters
-
-Parameter | Required | Description
---------- | ------- | -----------
-code | true | 6-digit confirmation code
-user[number] | true | Phone number of the associated User
-
 ## Sign Up
 
 ```shell
 curl "...api/v1/signup"
-  -d "code=123456&user[number]=%2b18005555555&user[fname]=Ethan&user[lname]=Held"
+  -d "user[fname]=Cash&
+  user[lname]=Money&
+  user[email]=cashmoney%40gmail.com
+  user[password]=Ca5hM0n3y
+  user[dob]=1990-01-01
+  user[number]=%2b15555552016"
 ```
 
 > Successful response:
@@ -117,41 +27,43 @@ curl "...api/v1/signup"
 ```json
 {
   "id": 2,
-  "fname": "Ethan",
-  "lname": "Held",
-  "number": "+12146163710",
-  "address": "123 Some St.",
-  "city": "Los Angeles",
-  "state": "CA",
-  "zip": "90024",
+  "fname": "Cash",
+  "lname": "Money",
+  "number": "+15555552016",
+  "created_at": "2016-01-01T01:02:03.004Z",
+  "updated_at": "2016-01-02T01:02:03.004Z",
+  "email": "cashmoney@gmail.com",
   "dob": "2000-01-01",
-  "accounts":
-  [
-    "1234",
-    "5678"
-  ],
-  "created_at": "2016-01-01T01:00:00.000Z",
-  "updated_at": "2016-01-02T01:00:00.000Z",
-  "token": "abc123..."
+  "token": "GPFrZEfm4isNwvqPziJkqj3d"
 }
 ```
 
-> Invalid code or phone number:
+> Validation errors
 
 ```json
 {
-  "confirmation": "rejected"
+  "fname":[
+    "can't be blank"
+  ],
+  "lname":[
+    "can't be blank"
+  ],
+  "email":[
+    "can't be blank",
+    "is invalid",
+    "has already been taken"
+  ],
+  "password":[
+    "can't be blank",
+    "is too short (minimum is 8 characters)"
+  ],
+  "dob":[
+    "can't be blank"
+  ],
 }
 ```
 
-> Other error responses:
-
-```plaintext
-"This call requires a confirmation code"
-"This call requires a name (user[fname], user[lname]) and phone number (user[number])"
-```
-
-Creates a new User. Accepts a 6-digit confirmation code, a phone number, a first name, and a last name, and, if successful, returns the created User model (or idempotently, the User model corresponding to the phone number if the User already exists) in addition to that user's token.
+Creates a new User. Accepts an email, a first name, and a last name, date of birth, and optionally a phone number. If successful, this call returns the created User model in addition to that user's token. If one of the required fields is absent, the email has already been taken, the email has an invalid format, or the password is less than 8 characters, a validation error will be returned with the error code "422 Unprocessable Entity"
 
 ### HTTP Request
 
@@ -159,9 +71,62 @@ Creates a new User. Accepts a 6-digit confirmation code, a phone number, a first
 
 ### Query Parameters
 
-Parameter | Required | Description
+Parameter | Validations | Description
 --------- | ------- | -----------
-code | true | 6-digit confirmation code
-user[number] | true | Phone number of the associated User
-user[fname] | true | The User's first name
-user[lname] | true | The User's last name
+user[fname] | Present | The User's first name
+user[lname] | Present | The User's last name
+user[email] | Present, email-format, unique | The User's email.
+user[password] | Minimum 8 characters | The User's password
+user[dob] | Present | The User's date of birth
+user[number] | None | The User's phone number
+
+## Get Token
+
+```shell
+curl -X GET "...api/v1/auth?
+  user[email]=cashmoney%40gmail.com&
+  user[password]=Ca5hM0n3y"
+```
+
+> Successful response:
+
+```json
+{
+  "id": 2,
+  "fname": "Cash",
+  "lname": "Money",
+  "number": "+15555552016",
+  "created_at": "2016-01-01T01:02:03.004Z",
+  "updated_at": "2016-01-02T01:02:03.004Z",
+  "email": "cashmoney@gmail.com",
+  "dob": "2000-01-01",
+  "token": "GPFrZEfm4isNwvqPziJkqj3d"
+}
+```
+
+> Validation errors
+
+```json
+{
+  "email":[
+    "can't be blank"
+  ],
+  "password":[
+    "can't be blank",
+    "is incorrect"
+  ]
+}
+```
+
+Accepts an email and password and, if successful, returns the User model (containing that User's token) corresponding to the given email.
+
+### HTTP Request
+
+`GET ...api/v1/auth`
+
+### Query Parameters
+
+Parameter | Validations | Description
+--------- | ------- | -----------
+user[email] | Present | The User's email.
+user[password] | Present, correct | The User's password
