@@ -8,7 +8,6 @@ includes:
   - authentication
   - general
   - users
-  - accounts
   - errors
 
 search: true
@@ -18,13 +17,17 @@ search: true
 
 Welcome to the Dimention API documentation.
 
-For now, the API is located at the AWS Elastic Beanstalk url:
+The app for the API is located at the following URL:
 
-`http://dimention-env-vd3evffjxi.elasticbeanstalk.com`
+`https://app.dimention.co/`
+
+The app can also be found at the AWS Elastic Beanstalk URL:
+
+`https://dimention-env-vd3evffjxi.elasticbeanstalk.com/`
 
 The API is located at `/api` and is versioned (`/api/v1`, etc). Because there is only one version at the moment, this means you should access all API calls at the following URL:
 
-`http://dimention-env-vd3evffjxi.elasticbeanstalk.com/api/v1`
+`https://app.dimention.co/api/v1`
 
 In the proceeding documentation, this URL will be abbreviated as:
 
@@ -63,7 +66,7 @@ curl "...api/v1"
 
 ```json
 {
-  "body":"POST Request: foo=bar"
+  "body": "POST Request: foo=bar"
 }
 ```
 
