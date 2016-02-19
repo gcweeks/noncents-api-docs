@@ -8,6 +8,7 @@ includes:
   - authentication
   - general
   - users
+  - vices
   - errors
 
 search: true

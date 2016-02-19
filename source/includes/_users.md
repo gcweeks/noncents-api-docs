@@ -26,6 +26,7 @@ curl "...api/v1/users"
   "email": "cashmoney@gmail.com",
   "dob": "2000-01-01",
   "invest_percent": 10,
+  "vices": [],
   "token": "GPFrZEfm4isNwvqPziJkqj3d"
 }
 ```
@@ -92,7 +93,11 @@ curl "...api/v1/users/me"
   "created_at": "2016-01-01T01:02:03.004Z",
   "updated_at": "2016-01-02T01:02:03.004Z",
   "email": "cashmoney@gmail.com",
-  "invest_percent": 10
+  "invest_percent": 10,
+  "vices": [
+    "Nightlife",
+    "Travel"
+  ]
 }
 ```
 
@@ -122,7 +127,11 @@ curl -X PUT "...api/v1/users/me"
   "created_at": "2016-01-01T01:02:03.004Z",
   "updated_at": "2016-01-02T01:02:03.004Z",
   "email": "cashmoney@gmail.com",
-  "invest_percent": 10
+  "invest_percent": 10,
+  "vices": [
+    "Nightlife",
+    "Travel"
+  ]
 }
 ```
 
@@ -161,3 +170,70 @@ user[lname] | Present | The User's last name
 user[password] | Minimum 8 characters | The User's password
 user[invest_percent] | Between 0 and 100 (Default 0) | The User's spend-to-save percentage
 user[number] | None | The User's phone number
+
+## Set User Vices
+
+```shell
+curl "...api/v1/users/me/vices"
+  -d "vices[]=Travel&vices[]=Nightlife"
+  -H "Authorization: TOKEN"
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "id": 2,
+  "fname": "New",
+  "lname": "Name",
+  "number": "+15555552016",
+  "dob": "1990-01-01",
+  "created_at": "2016-01-01T01:02:03.004Z",
+  "updated_at": "2016-01-02T01:02:03.004Z",
+  "email": "cashmoney@gmail.com",
+  "invest_percent": 10,
+  "vices": [
+    "Nightlife",
+    "Travel"
+  ]
+}
+```
+
+> Validation errors
+
+```json
+{
+  "vices":[
+    "are nil",
+    "are in incorrect format",
+    "have one or more invalid names"
+  ]
+}
+```
+
+Sets the authenticated User's Vices. The list of available Vices is given below, and can optionally be obtained by making a call to `GET ...api/v1/vices`. It is worth noting that this call will overwrite the User's existing Vices, so if the goal is to add one Vice, you must first obtain the original list of Vices and then send the augmented list of Vices as a payload to this endpoint. To clear all Vices, simply pass in a Vice of 'None'.
+
+### List of Vices
+
+* `Nightlife`
+* `Restaurants`
+* `Shopping`
+* `FastFood`
+* `CoffeeShops`
+* `Travel`
+* `Experiences`
+* `Electronics`
+* `PersonalCare`
+* `Movies`
+* `RideSharing`
+* `None` - Will clear all vices
+
+### HTTP Request
+
+`POST ...api/v1/users/me/vices`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ------- | -----------
+vices[] | Equal to any of the Vices from the list above | The list of Vices to set for the User
