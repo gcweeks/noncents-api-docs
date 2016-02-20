@@ -237,3 +237,103 @@ Sets the authenticated User's Vices. The list of available Vices is given below,
 Parameter | Validations | Description
 --------- | ------- | -----------
 vices[] | Equal to any of the Vices from the list above | The list of Vices to set for the User
+
+## Plaid
+
+```shell
+curl -X GET "...api/v1/users/me/account_auth"
+  -d "username=plaid_test&password=plaid_good&type=wells"
+  -H "Authorization: TOKEN"
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "id":1,
+    "user_id":1,
+    "created_at":"2016-02-19T11:25:18.179-08:00",
+    "updated_at":"2016-02-19T11:25:18.179-08:00",
+    "plaid_id":"QPO8Jo8vdDHMepg41PBwckXm4KdK1yUdmXOwK",
+    "name":"Plaid Savings",
+    "institution":"fake_institution",
+    "available_balance":null,
+    "current_balance":null,
+    "account_num":9900009606,
+    "routing_num":21000021,
+    "account_type":"depository",
+    "account_subtype":"savings"
+    },
+    {
+      "..."
+    },
+    "..."
+]
+```
+
+> If the account requires MFA, you will instead get a response like this:
+
+```json
+{
+  "access_token": "test_citi"
+}
+```
+
+> Validation errors
+
+```json
+{
+  "username":[
+    "is required"
+  ],
+  "password":[
+    "is required"
+  ],
+  "type":[
+    "is required"
+  ]
+}
+```
+
+> Plaid errors
+
+```json
+{
+  "code": 1200,
+  "message": "invalid credentials",
+  "resolve": "The username or password provided were not correct."
+}
+```
+
+Gets all accounts associated with bank credentials and stores them in the User model and returns them to the client. This call is expected to be followed by a call to remove unnecessary accounts, `POST .../api/v1/users/me/remove_accounts`. Otherwise, it will be assumed that the User wants to use all accounts associated with their credentials.
+
+### List of Bank Types
+
+Type | MFA | Third
+amex | | Third
+bofa | Question-based MFA (3 questions) or code-based MFA (SafePass) | Third
+capone360 | Question-based MFA (1 to 3 questions) | Third
+schwab | | Third
+chase | Code-based MFA | Third
+citi | Question-based MFA and selection-based MFA | Third
+fidelity | | Third
+nfcu | | Third
+pnc | Question-based MFA (3 questions) | Third
+suntrust | | Third
+td | Question-based MFA (1 to 3 questions) | Third
+us | Question-based MFA (1 to 3 questions) | Third
+usaa | Question-based MFA (3 questions) | Third
+wells | | Third
+
+### HTTP Request
+
+`PUT ...api/v1/users/me/account_auth`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ------- | -----------
+type | Present | The bank name
+username | Present | The bank username
+password | Present | The bank password
