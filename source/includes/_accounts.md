@@ -3,11 +3,11 @@
 ## Get Accounts
 
 ```shell
-curl "...api/v1/accounts"
+curl _X GET "...api/v1/accounts"
   -H "Authorization: TOKEN"
 ```
 
-> The above command returns JSON structured like this:
+> Successful response:
 
 ```json
 {

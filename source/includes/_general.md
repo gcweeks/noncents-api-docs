@@ -5,7 +5,7 @@ The following are general API calls that don't fall into any other category.
 ## iOS Version
 
 ```shell
-curl "...api/v1/version/ios"
+curl -X GET "...api/v1/version/ios"
 ```
 
 > Response:

@@ -3,10 +3,10 @@
 ## Get a List of Vices
 
 ```shell
-curl "...api/v1/vices"
+curl -X GET "...api/v1/vices"
 ```
 
-> The above command returns JSON structured like this:
+> Successful response:
 
 ```json
 [

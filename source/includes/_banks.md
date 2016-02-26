@@ -3,11 +3,11 @@
 ## Get a Specific Bank
 
 ```shell
-curl "...api/v1/banks/3"
+curl -X GET "...api/v1/banks/3"
   -H "Authorization: TOKEN"
 ```
 
-> The above command returns JSON structured like this:
+> Successful response:
 
 ```json
 {
