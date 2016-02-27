@@ -304,6 +304,41 @@ curl -X GET "...api/v1/users/me/account_connect"
 }
 ```
 
+> If the bank requires a code that they sent to the user's email/phone (chase/bofa only), you will instead be given a list of devices so the user can select which device they want the code sent to
+
+```json
+{
+  "accounts":[],
+  "transactions":[],
+  "permissions":[
+    "connect"
+  ],
+  "access_token":"9b97b...265ac",
+  "api_res":"Requires further authentication",
+  "info":{},
+  "pending_mfa_questions":
+  {
+    "type":"list",
+    "mfa":[
+      {
+        "mask":"xxx-xxx-2016",
+        "type":"phone"
+      },
+      {
+        "mask":"c..y@gmail.com",
+        "type":"email"
+      }
+    ],
+    "access_token":"9b97b...265ac"
+  }
+}
+```
+
+> You can then use this information to send the proper call to the users/me/account_mfa route using the given "mask" or "type" fields
+
+```json
+```
+
 > The following are a list of pending_mfa_questions styles you will encounter:
 
 ```json
@@ -347,30 +382,6 @@ curl -X GET "...api/v1/users/me/account_connect"
 ```json
 ```
 
-> If the bank requires a code that they sent to the user's email/phone (chase/bofa), you will instead be given a list of devices so the user can select which device they want the code sent to
-
-```json
-{
-  "type": "list",
-  "mfa": [
-    {
-      "mask": "xxx-xxx-5309",
-      "type": "phone"
-    },
-    {
-      "mask": "t..t@plaid.com",
-      "type": "email"
-    }
-  ],
-  "access_token": "9b97b...265ac"
-}
-```
-
-> You can then use this information to send the proper call to the users/me/account_mfa route
-
-```json
-```
-
 > Validation errors
 
 ```json
@@ -407,9 +418,17 @@ curl -X GET "...api/v1/users/me/account_connect"
   "message": "access_token disallowed",
   "resolve": "You included an access_token on a submit call - this is only allowed on step and get routes."
 }
+
+{
+"code": 1204,
+"message": "invalid send_method",
+"resolve": "The MFA send_method provided was invalid. Consult the documentation for the proper format."
+}
 ```
 
 Gets all accounts associated with bank credentials and stores them in the User model and returns them to the client. This call is expected to be followed by a call to remove unnecessary accounts, `POST .../api/v1/users/me/remove_accounts`. Otherwise, it will be assumed that the User wants to use all accounts associated with their credentials.
+
+To perform this call, provide a bank type (listed in the table below), username, and password. If the bank type is 'usaa', you must additionally provide a pin.
 
 ### List of Bank Types
 
@@ -441,6 +460,7 @@ Parameter | Validations | Description
 type | Present | The bank name
 username | Present | The bank username
 password | Present | The bank password
+pin | Optional | The bank pin (usaa only)
 
 ## Plaid MFA
 
