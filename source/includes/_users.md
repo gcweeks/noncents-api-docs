@@ -1,5 +1,34 @@
 # Users
 
+## Check Email
+
+```shell
+curl -X GET "...api/v1/check_email"
+  -d "email=cashmoney@gmail.com"
+  -H "Authorization: TOKEN"
+```
+
+> Response:
+
+```json
+{
+  "email": "exists",
+  "email": "does not exist"
+}
+```
+
+Check to see if a User exists with the given email
+
+### HTTP Request
+
+`GET ...api/v1/check_email`
+
+### Query Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+email | Present | The User's email
+
 ## Sign Up
 
 ```shell
@@ -65,7 +94,7 @@ Creates a new User. Accepts an email, a first name, and a last name, date of bir
 ### Query Parameters
 
 Parameter | Validations | Description
---------- | ------- | -----------
+--------- | ----------- | -----------
 user[fname] | Present | The User's first name
 user[lname] | Present | The User's last name
 user[email] | Present, email-format, unique | The User's email.
