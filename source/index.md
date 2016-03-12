@@ -9,6 +9,7 @@ includes:
   - general
   - users
   - vices
+  - transactions
   - errors
 
 search: true

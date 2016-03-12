@@ -46,16 +46,27 @@ curl -X POST "...api/v1/users"
 
 ```json
 {
-  "id": 2,
-  "fname": "Cash",
-  "lname": "Money",
-  "number": "+15555552016",
-  "created_at": "2016-01-01T01:02:03.004Z",
-  "updated_at": "2016-01-02T01:02:03.004Z",
-  "email": "cashmoney@gmail.com",
-  "dob": "2000-01-01",
-  "invest_percent": 10,
-  "vices": [],
+  "id":1,
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "accounts":[],
+  "fund": {
+    "id": 1,
+    "balance": "0.0",
+    "user_id": 1,
+    "created_at":"2016-02-19T11:24:33.873-08:00",
+    "updated_at":"2016-02-19T11:24:33.873-08:00",
+    "amount_invested": "0.0"
+  },
+  "transactions": [],
+  "vices":[],
   "token": "GPFrZEfm4isNwvqPziJkqj3d"
 }
 ```
@@ -114,19 +125,20 @@ curl -X GET "...api/v1/users/me"
 
 ```json
 {
-  "id": 2,
-  "fname": "Cash",
-  "lname": "Money",
-  "number": "+15555552016",
-  "dob": "1990-01-01",
-  "created_at": "2016-01-01T01:02:03.004Z",
-  "updated_at": "2016-01-02T01:02:03.004Z",
-  "email": "cashmoney@gmail.com",
-  "invest_percent": 10,
-  "vices": [
-    "Nightlife",
-    "Travel"
-  ]
+  "id":1,
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "accounts":["..."],
+  "fund":"...",
+  "transactions": ["..."],
+  "vices":["..."]
 }
 ```
 
@@ -148,19 +160,22 @@ curl -X PUT "...api/v1/users/me"
 
 ```json
 {
-  "id": 2,
-  "fname": "New",
-  "lname": "Name",
-  "number": "+15555552016",
-  "dob": "1990-01-01",
-  "created_at": "2016-01-01T01:02:03.004Z",
-  "updated_at": "2016-01-02T01:02:03.004Z",
-  "email": "cashmoney@gmail.com",
-  "invest_percent": 10,
-  "vices": [
-    "Nightlife",
-    "Travel"
-  ]
+  "id":1,
+  "fname":"New",
+  "lname":"Name",
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "accounts":["..."],
+  "fund":"...",
+  "transactions": ["..."],
+  "vices":["..."]
 }
 ```
 
@@ -193,7 +208,7 @@ Updates certain fields of the authenticated User. Validations only apply to fiel
 ### URL Parameters
 
 Parameter | Validations | Description
---------- | ------- | -----------
+--------- | ----------- | -----------
 user[fname] | Present | The User's first name
 user[lname] | Present | The User's last name
 user[password] | Minimum 8 characters | The User's password
@@ -212,15 +227,19 @@ curl -X PUT "...api/v1/users/me/vices"
 
 ```json
 {
-  "id": 2,
-  "fname": "New",
-  "lname": "Name",
-  "number": "+15555552016",
-  "dob": "1990-01-01",
-  "created_at": "2016-01-01T01:02:03.004Z",
-  "updated_at": "2016-01-02T01:02:03.004Z",
-  "email": "cashmoney@gmail.com",
-  "invest_percent": 10,
+  "id":1,
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "accounts":["..."],
+  "fund":"...",
+  "transactions": ["..."],
   "vices": [
     "Nightlife",
     "Travel"
@@ -264,7 +283,7 @@ Sets the authenticated User's Vices. The list of available Vices is given below,
 ### URL Parameters
 
 Parameter | Validations | Description
---------- | ------- | -----------
+--------- | ----------- | -----------
 vices[] | Equal to any of the Vices from the list above | The list of Vices to set for the User
 
 ## Plaid Connect
@@ -280,16 +299,17 @@ curl -X GET "...api/v1/users/me/account_connect"
 
 ```json
 {
-  "id": 1,
-  "fname": "Cash",
-  "lname": "Money",
-  "number": "+15555552016",
-  "created_at": "2016-02-19T11:24:33.873-08:00",
-  "updated_at": "2016-02-19T11:24:33.873-08:00",
-  "email": "cashmoney@gmail.com",
-  "dob": "1990-01-20",
-  "invest_percent": 10,
-  "accounts": [
+  "id":1,
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "accounts":[
     {
       "id":1,
       "user_id":1,
@@ -307,7 +327,9 @@ curl -X GET "...api/v1/users/me/account_connect"
     },
     "..."
   ],
-  "vices": []
+  "fund":"...",
+  "transactions": ["..."],
+  "vices":["..."]
 }
 ```
 
@@ -485,7 +507,7 @@ wells | No | None
 ### URL Parameters
 
 Parameter | Validations | Description
---------- | ------- | -----------
+--------- | ----------- | -----------
 type | Present | The bank name
 username | Present | The bank username
 password | Present | The bank password
@@ -559,25 +581,11 @@ curl -X PUT "...api/v1/users/me/remove_accounts"
   "email":"cashmoney@gmail.com",
   "dob":"1990-01-20",
   "invest_percent":10,
-  "accounts":[
-    {
-      "id":6,
-      "user_id":1,
-      "created_at":"2016-02-19T11:40:35.232-08:00",
-      "updated_at":"2016-02-25T15:36:25.588-08:00",
-      "plaid_id":"nban4wnPKEtnmEpaKzbYFYQvA7D7pnCaeDBMy",
-      "name":"Plaid Checking",
-      "institution":"fake_institution",
-      "available_balance":null,
-      "current_balance":null,
-      "account_num":0,
-      "routing_num":0,
-      "account_type":"depository",
-      "account_subtype":"checking"
-    },
-    "..."
-  ],
-  "vices":[]
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "accounts":["..."],
+  "fund":"...",
+  "transactions": ["..."],
+  "vices": ["..."]
 }
 ```
 
@@ -603,5 +611,107 @@ To specify which accounts to remove, pass in an array `accounts` that contains t
 ### URL Parameters
 
 Parameter | Validations | Description
---------- | ------- | -----------
+--------- | ----------- | -----------
 accounts[] | Required | An array of Account IDs for Accounts you wish to delete
+
+## Refresh Transactions
+
+```shell
+curl -X POST "...api/v1/users/me/refresh_transactions"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":1,
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "accounts":["..."],
+  "fund":"...",
+  "transactions":[
+    {
+      "id":1,
+      "plaid_id":"KdDjmojBERUKx3JkDdO5IaRJdZeZKNuK4bnKJ1",
+      "date":"2014-06-23",
+      "amount":"2307.15",
+      "name":"Apple Store",
+      "category_id":"19013000",
+      "account_id":1,
+      "created_at":"2016-02-19T11:24:33.873-08:00",
+      "updated_at":"2016-02-19T11:24:33.873-08:00",
+      "user_id":1,
+      "invested":false,
+      "backed_out":true,
+      "vice":"Electronics"
+    }
+  ],
+  "vices":["..."]
+}
+```
+
+This route pulls the user's latest transactions. Transactions are pulled for every bank they have authenticated with, then filtered down to only the accounts they have selected (see "Remove Accounts"), then further filtered down to only the transactions that correspond to vices the user has selected (see "Set User Vices") and finally stored in the user model (User.transactions). The entire user model is returned as a result of this call.
+
+### HTTP Request
+
+`POST ...api/v1/users/me/refresh_transactions`
+
+## (Dev) Deduct
+
+```shell
+curl -X POST "...api/v1/users/me/dev_deduct"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":1,
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "accounts":["..."],
+  "fund":"...",
+  "transactions":[
+    {
+      "id":1,
+      "plaid_id":"KdDjmojBERUKx3JkDdO5IaRJdZeZKNuK4bnKJ1",
+      "date":"2014-06-23",
+      "amount":"2307.15",
+      "name":"Apple Store",
+      "category_id":"19013000",
+      "account_id":1,
+      "created_at":"2016-02-19T11:24:33.873-08:00",
+      "updated_at":"2016-02-19T11:24:33.873-08:00",
+      "user_id":1,
+      "invested":false,
+      "backed_out":false,
+      "vice":"Electronics"
+    }
+  ],
+  "vices":["..."]
+}
+```
+
+This route is only for development purposes and will be removed in the future. It travels to each of the transactions in User.transactions and "deducts" money from them, setting the transaction's 'invested' field to true and depositing (Transaction.amount * User.invest_percent/100) dollars into User.fund.invested.
+
+One exception is that if the transaction's 'backed_out' field is true, the 'invested' field will stay false and no money will be deposited into the fund.
+
+### HTTP Request
+
+`POST ...api/v1/users/me/dev_deduct`

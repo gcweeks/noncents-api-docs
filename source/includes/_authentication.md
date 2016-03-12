@@ -22,15 +22,20 @@ curl -X GET "...api/v1/auth?
 
 ```json
 {
-  "id": 2,
-  "fname": "Cash",
-  "lname": "Money",
-  "number": "+15555552016",
-  "created_at": "2016-01-01T01:02:03.004Z",
-  "updated_at": "2016-01-02T01:02:03.004Z",
-  "email": "cashmoney@gmail.com",
-  "dob": "2000-01-01",
-  "invest_percent": 10,
+  "id":1,
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "accounts":["..."],
+  "fund":"...",
+  "transactions": ["..."],
+  "vices":["..."],
   "token": "GPFrZEfm4isNwvqPziJkqj3d"
 }
 ```
