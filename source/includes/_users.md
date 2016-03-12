@@ -88,7 +88,7 @@ curl -X POST "...api/v1/users"
   ],
   "password":[
     "can't be blank",
-    "is too short (minimum is 8 characters)"
+    "is invalid"
   ],
   "dob":[
     "can't be blank"
@@ -109,7 +109,7 @@ Parameter | Validations | Description
 user[fname] | Present | The User's first name
 user[lname] | Present | The User's last name
 user[email] | Present, email-format, unique | The User's email.
-user[password] | Minimum 8 characters | The User's password
+user[password] | Minimum 8 characters, 1 uppercase letter, 1 number | The User's password
 user[dob] | Present | The User's date of birth
 user[invest_percent] | Between 0 and 100 (Default 0) | The User's spend-to-save percentage
 user[number] | None | The User's phone number
