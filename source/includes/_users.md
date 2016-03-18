@@ -39,7 +39,8 @@ curl -X POST "...api/v1/users"
   user[password]=Ca5hM0n3y&
   user[dob]=1990-01-20&
   user[invest_percent]=10&
-  user[number]=%2b15555552016"
+  user[number]=%2b15555552016"&
+  user[goal]=420
 ```
 
 > Successful response:
@@ -56,6 +57,7 @@ curl -X POST "...api/v1/users"
   "dob":"1990-01-20",
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
   "accounts":[],
   "fund": {
     "id": 1,
@@ -92,6 +94,12 @@ curl -X POST "...api/v1/users"
   ],
   "dob":[
     "can't be blank"
+  ],
+  "invest_percent":[
+    "is not included in the list"
+  ],
+  "goal":[
+    "is not included in the list"
   ]
 }
 ```
@@ -112,6 +120,7 @@ user[email] | Present, email-format, unique | The User's email.
 user[password] | Minimum 8 characters, 1 uppercase letter, 1 number | The User's password
 user[dob] | Present | The User's date of birth
 user[invest_percent] | Between 0 and 100 (Default 0) | The User's spend-to-save percentage
+user[goal] | Between 1 and 5500 (Default 230) | The User's monthly investment goal
 user[number] | None | The User's phone number
 
 ## Get Authenticated User
@@ -135,6 +144,7 @@ curl -X GET "...api/v1/users/me"
   "dob":"1990-01-20",
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
   "accounts":["..."],
   "fund":"...",
   "transactions": ["..."],
@@ -172,6 +182,7 @@ curl -X PUT "...api/v1/users/me"
   "dob":"1990-01-20",
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
   "accounts":["..."],
   "fund":"...",
   "transactions": ["..."],
@@ -195,6 +206,12 @@ curl -X PUT "...api/v1/users/me"
   ],
   "dob":[
     "can't be blank"
+  ],
+  "invest_percent":[
+    "is not included in the list"
+  ],
+  "goal":[
+    "is not included in the list"
   ]
 }
 ```
@@ -213,6 +230,7 @@ user[fname] | Present | The User's first name
 user[lname] | Present | The User's last name
 user[password] | Minimum 8 characters | The User's password
 user[invest_percent] | Between 0 and 100 (Default 0) | The User's spend-to-save percentage
+user[goal] | Between 1 and 5500 (Default 230) | The User's monthly investment goal
 user[number] | None | The User's phone number
 
 ## Set User Vices
@@ -237,6 +255,7 @@ curl -X PUT "...api/v1/users/me/vices"
   "dob":"1990-01-20",
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
   "accounts":["..."],
   "fund":"...",
   "transactions": ["..."],
@@ -309,6 +328,7 @@ curl -X GET "...api/v1/users/me/account_connect"
   "dob":"1990-01-20",
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
   "accounts":[
     {
       "id":1,
@@ -582,6 +602,7 @@ curl -X PUT "...api/v1/users/me/remove_accounts"
   "dob":"1990-01-20",
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
   "accounts":["..."],
   "fund":"...",
   "transactions": ["..."],
@@ -635,6 +656,7 @@ curl -X POST "...api/v1/users/me/refresh_transactions"
   "dob":"1990-01-20",
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
   "accounts":["..."],
   "fund":"...",
   "transactions":[
@@ -685,8 +707,16 @@ curl -X POST "...api/v1/users/me/dev_deduct"
   "dob":"1990-01-20",
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
   "accounts":["..."],
-  "fund":"...",
+  "fund": {
+    "id": 1,
+    "balance": "230.72",
+    "user_id": 1,
+    "created_at":"2016-02-19T11:24:33.873-08:00",
+    "updated_at":"2016-02-19T11:24:33.873-08:00",
+    "amount_invested": "230.72",
+  },
   "transactions":[
     {
       "id":1,
@@ -699,7 +729,7 @@ curl -X POST "...api/v1/users/me/dev_deduct"
       "created_at":"2016-02-19T11:24:33.873-08:00",
       "updated_at":"2016-02-19T11:24:33.873-08:00",
       "user_id":1,
-      "invested":false,
+      "invested":true,
       "backed_out":false,
       "vice":"Electronics"
     }

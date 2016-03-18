@@ -32,6 +32,7 @@ curl -X GET "...api/v1/auth?
   "dob":"1990-01-20",
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
   "accounts":["..."],
   "fund":"...",
   "transactions": ["..."],
