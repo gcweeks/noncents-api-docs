@@ -58,7 +58,6 @@ curl -X POST "...api/v1/users"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "accounts":[],
   "fund": {
     "id": 1,
     "balance": "0.0",
@@ -67,6 +66,8 @@ curl -X POST "...api/v1/users"
     "updated_at":"2016-02-19T11:24:33.873-08:00",
     "amount_invested": "0.0"
   },
+  "accounts":[],
+  "agexes":[],
   "transactions": [],
   "vices":[],
   "token": "GPFrZEfm4isNwvqPziJkqj3d"
@@ -145,8 +146,9 @@ curl -X GET "...api/v1/users/me"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "accounts":["..."],
   "fund":"...",
+  "accounts":["..."],
+  "agexes":["..."],
   "transactions": ["..."],
   "vices":["..."]
 }
@@ -183,8 +185,9 @@ curl -X PUT "...api/v1/users/me"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "accounts":["..."],
   "fund":"...",
+  "accounts":["..."],
+  "agexes":["..."],
   "transactions": ["..."],
   "vices":["..."]
 }
@@ -204,9 +207,6 @@ curl -X PUT "...api/v1/users/me"
     "can't be blank",
     "is too short (minimum is 8 characters)"
   ],
-  "dob":[
-    "can't be blank"
-  ],
   "invest_percent":[
     "is not included in the list"
   ],
@@ -216,7 +216,7 @@ curl -X PUT "...api/v1/users/me"
 }
 ```
 
-Updates certain fields of the authenticated User. Validations only apply to fields send to the server for update. All other fields will remain the same.
+Updates certain fields of the authenticated User. Validations only apply to fields send to the server for update. All other fields will remain the same. Some fields, just as date of birth, cannot be changed. See the provided "URL Parameters" table to see which fields can be modified.
 
 ### HTTP Request
 
@@ -256,8 +256,9 @@ curl -X PUT "...api/v1/users/me/vices"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "accounts":["..."],
   "fund":"...",
+  "accounts":["..."],
+  "agexes":["..."],
   "transactions": ["..."],
   "vices": [
     "Nightlife",
@@ -329,6 +330,7 @@ curl -X GET "...api/v1/users/me/account_connect"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "fund":"...",
   "accounts":[
     {
       "id":1,
@@ -347,7 +349,7 @@ curl -X GET "...api/v1/users/me/account_connect"
     },
     "..."
   ],
-  "fund":"...",
+  "agexes":["..."],
   "transactions": ["..."],
   "vices":["..."]
 }
@@ -603,8 +605,9 @@ curl -X PUT "...api/v1/users/me/remove_accounts"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "accounts":["..."],
   "fund":"...",
+  "accounts":["..."],
+  "agexes":["..."],
   "transactions": ["..."],
   "vices": ["..."]
 }
@@ -657,8 +660,9 @@ curl -X POST "...api/v1/users/me/refresh_transactions"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "accounts":["..."],
   "fund":"...",
+  "accounts":["..."],
+  "agexes":["..."],
   "transactions":[
     {
       "id":1,
@@ -673,8 +677,10 @@ curl -X POST "...api/v1/users/me/refresh_transactions"
       "user_id":1,
       "invested":false,
       "backed_out":true,
+      "amount_invested":"0.0",
       "vice":"Electronics"
-    }
+    },
+    "..."
   ],
   "vices":["..."]
 }
@@ -708,7 +714,6 @@ curl -X POST "...api/v1/users/me/dev_deduct"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "accounts":["..."],
   "fund": {
     "id": 1,
     "balance": "230.72",
@@ -717,6 +722,8 @@ curl -X POST "...api/v1/users/me/dev_deduct"
     "updated_at":"2016-02-19T11:24:33.873-08:00",
     "amount_invested": "230.72",
   },
+  "accounts":["..."],
+  "agexes":["..."],
   "transactions":[
     {
       "id":1,
@@ -731,17 +738,71 @@ curl -X POST "...api/v1/users/me/dev_deduct"
       "user_id":1,
       "invested":true,
       "backed_out":false,
+      "amount_invested":"230.72",
       "vice":"Electronics"
-    }
+    },
+    "..."
   ],
   "vices":["..."]
 }
 ```
 
-This route is only for development purposes and will be removed in the future. It travels to each of the transactions in User.transactions and "deducts" money from them, setting the transaction's 'invested' field to true and depositing (Transaction.amount * User.invest_percent/100) dollars into User.fund.invested.
+This route is only for development purposes and will be removed in the future. It travels to each of the transactions in User.transactions and "deducts" money from them, setting the transaction's 'invested' field to true and depositing (Transaction.amount * User.invest_percent/100) dollars into User.fund.invested and Transaction.amount_invested.
 
 One exception is that if the transaction's 'backed_out' field is true, the 'invested' field will stay false and no money will be deposited into the fund.
 
 ### HTTP Request
 
 `POST ...api/v1/users/me/dev_deduct`
+
+## (Dev) Aggregate Old Transactions
+
+```shell
+curl -X POST "...api/v1/users/me/dev_aggregate"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":1,
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
+  "fund": "...",
+  "accounts":["..."],
+  "agexes":[
+    {
+      "id":1,
+      "user_id":1,
+      "amount":"230.72",
+      "month":"2016-02-01",
+      "created_at":"2016-02-19T11:24:33.873-08:00",
+      "updated_at":"2016-02-19T11:24:33.873-08:00",
+      "vice":"Electronics"
+    },
+    "..."
+  ],
+  "transactions":["..."],
+  "vices":["..."]
+}
+```
+
+This route is only for development purposes and will be removed in the future. It finds all transactions older than a month and aggregates them. It does this by storing them in an Agex model and then deleting them, leaving only transactions for the current month.
+
+"Agex" is a portmanteau of "Aggregate Expenditure" and is used to represent the combination of invested transactions, by vice, for a given month. Accordingly, it has an 'amount' field, a 'vice' field, and a 'month' field (in the format YYYY-MM-01).
+
+This endpoint travels to each of the transactions in User.transactions and checks to see whether the Transaction was invested or not. If so, it looks for how much was invested and then adds that to the existing Agex model for the Transaction's associated month and vice, or creates a new Agex model if no such instance of it exists. Once completed, it removes all of those Transaction models (whether they were invested or not).
+
+
+### HTTP Request
+
+`POST ...api/v1/users/me/dev_aggregate`
