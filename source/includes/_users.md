@@ -39,8 +39,8 @@ curl -X POST "...api/v1/users"
   user[password]=Ca5hM0n3y&
   user[dob]=1990-01-20&
   user[invest_percent]=10&
-  user[number]=%2b15555552016"&
-  user[goal]=420
+  user[number]=%2b15555552016&
+  user[goal]=420"
 ```
 
 > Successful response:
@@ -118,7 +118,7 @@ Parameter | Validations | Description
 user[fname] | Present | The User's first name
 user[lname] | Present | The User's last name
 user[email] | Present, email-format, unique | The User's email.
-user[password] | Minimum 8 characters, 1 uppercase letter, 1 number | The User's password
+user[password] | Minimum 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number | The User's password
 user[dob] | Present | The User's date of birth
 user[invest_percent] | Between 0 and 100 (Default 0) | The User's spend-to-save percentage
 user[goal] | Between 1 and 5500 (Default 230) | The User's monthly investment goal
@@ -228,7 +228,7 @@ Parameter | Validations | Description
 --------- | ----------- | -----------
 user[fname] | Present | The User's first name
 user[lname] | Present | The User's last name
-user[password] | Minimum 8 characters | The User's password
+user[password] | Minimum 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number | The User's password
 user[invest_percent] | Between 0 and 100 (Default 0) | The User's spend-to-save percentage
 user[goal] | Between 1 and 5500 (Default 230) | The User's monthly investment goal
 user[number] | None | The User's phone number
