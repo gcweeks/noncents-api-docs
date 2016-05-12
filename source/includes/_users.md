@@ -359,21 +359,13 @@ curl -X GET "...api/v1/users/me/account_connect"
 
 ```json
 {
-  "accounts":[],
-  "transactions":[],
-  "permissions":["connect"],
-  "access_token":"test_9b97b...265ac",
-  "api_res":"Requires further authentication",
-  "info":{},
-  "pending_mfa_questions":
-  {
-    "type":"device",
-    "mfa":
+  "access_token":"9b97b...265ac",
+  "mfa_type":"questions",
+  "mfa":[
     {
-      "message":"Code sent to c...y@gmail.com"
-    },
-    "access_token":"9b97b...265ac"
-  }
+      "question":"You say tomato, I say...?"
+    }
+  ]
 }
 ```
 
@@ -381,29 +373,18 @@ curl -X GET "...api/v1/users/me/account_connect"
 
 ```json
 {
-  "accounts":[],
-  "transactions":[],
-  "permissions":[
-    "connect"
-  ],
   "access_token":"9b97b...265ac",
-  "api_res":"Requires further authentication",
-  "info":{},
-  "pending_mfa_questions":
-  {
-    "type":"list",
-    "mfa":[
-      {
-        "mask":"xxx-xxx-2016",
-        "type":"phone"
-      },
-      {
-        "mask":"c..y@gmail.com",
-        "type":"email"
-      }
-    ],
-    "access_token":"9b97b...265ac"
-  }
+  "mfa_type":"questions",
+  "mfa":[
+    {
+      "mask":"xxx-xxx-2016",
+      "type":"phone"
+    },
+    {
+      "mask":"c..y@gmail.com",
+      "type":"email"
+    }
+  ]
 }
 ```
 
@@ -416,26 +397,28 @@ curl -X GET "...api/v1/users/me/account_connect"
 
 ```json
 {
-  "type":"questions",
+  "access_token":"9b97b...265ac",
+  "mfa_type":"questions",
   "mfa":[
     {
       "question":"You say tomato, I say...?"
     }
-  ],
-  "access_token":"9b97b...265ac"
+  ]
 }
 
 {
-  "type":"device",
-  "mfa":
-  {
-    "message":"Code sent to t...t@plaid.com"
-  },
-  "access_token":"9b97b...265ac"
+  "access_token":"9b97b...265ac",
+  "mfa_type":"device",
+  "mfa":[
+    {
+      "message":"Code sent to t...t@plaid.com"
+    }
+  ]
 }
 
 {
-  "type":"selections",
+  "access_token":"9b97b...265ac",
+  "mfa_type":"selections",
   "mfa":[
     {
       "question":"You say tomato, I say...?",
@@ -445,8 +428,7 @@ curl -X GET "...api/v1/users/me/account_connect"
       "question":"Ketchup or mustard?",
       "answers":["ketchup","mustard"]
     }
-  ],
-  "access_token": "9b97b...265ac"
+  ]
 }
 ```
 
@@ -476,26 +458,14 @@ curl -X GET "...api/v1/users/me/account_connect"
 ```json
 {
   "code": 1200,
-  "message": "invalid credentials",
+  "message": "Code 1200: invalid credentials. The username or password provided were not correct.",
   "resolve": "The username or password provided were not correct."
 }
 
 {
-  "code": 1215,
-  "message": "mfa reset",
-  "resolve": "MFA access has changed or this application's access has been revoked. Submit a PATCH call to resolve."
-}
-
-{
-  "code": 1003,
-  "message": "access_token disallowed",
-  "resolve": "You included an access_token on a submit call - this is only allowed on step and get routes."
-}
-
-{
-"code": 1204,
-"message": "invalid send_method",
-"resolve": "The MFA send_method provided was invalid. Consult the documentation for the proper format."
+  "code": 1203,
+  "message": "Code 1203: invalid mfa. The MFA response provided was not correct.",
+  "resolve": "The MFA response provided was not correct."
 }
 ```
 
