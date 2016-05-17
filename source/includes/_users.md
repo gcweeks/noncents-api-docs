@@ -662,6 +662,87 @@ This route pulls the user's latest transactions. Transactions are pulled for eve
 
 `POST ...api/v1/users/me/refresh_transactions`
 
+## (Dev) Populate Sample Data
+
+```shell
+curl -X POST "...api/v1/users/me/dev_populate"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":1,
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-05-16T11:24:33.873-08:00",
+  "updated_at":"2016-05-16T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":null,
+  "goal":230,
+  "fund": {
+    "id": 1,
+    "balance": "1.53",
+    "user_id": 1,
+    "created_at":"2016-05-16T11:24:33.873-08:00",
+    "updated_at":"2016-05-16T11:24:33.873-08:00",
+    "amount_invested": "0.53"
+  },
+  "accounts":[,
+    {
+      "id":3,
+      "user_id":1,
+      "created_at":"2016-05-16T11:24:33.873-08:00",
+      "updated_at":"2016-05-16T11:24:33.873-08:00",
+      "plaid_id":"QPO8Jo8vdDHMepg41PBwckXm4KdK1yUdmXOwK",
+      "name":"Plaid Savings",
+      "institution":"fake_institution",
+      "available_balance":null,
+      "current_balance":null,
+      "account_num":0,
+      "routing_num":0,
+      "account_type":"depository",
+      "account_subtype":"savings"
+    }
+    "..."
+  ],
+  "transactions":[
+    {
+      "id":1,
+      "plaid_id":"foo",
+      "date":"2015-05-16",
+      "amount":"13.37",
+      "name":"Python Sticker",
+      "category_id":"19013000",
+      "account_id":1,
+      "created_at":"2016-05-16T11:24:33.873-08:00",
+      "updated_at":"2016-05-16T11:24:33.873-08:00",
+      "user_id":1,
+      "invested":false,
+      "backed_out":false,
+      "amount_invested":"0.0",
+      "vice":"Electronics"
+    },
+    "..."
+  ],
+  "agexes":["..."],
+  "vices":[
+    "CoffeeShops",
+    "Electronics"
+  ]
+}
+```
+
+This route is only for development purposes and will be removed in the future. It fills the authed User's properties with sample data. To do this, it resets the User's Fund balances and destroys all of their existing Vices, Banks, Accounts, and Transactions, replacing them with sample models. These sample models demonstrate things like having multiple Accounts and Vices, backing out of Transactions, having invested Transactions, and having older (more than 2 weeks old) Transactions.
+
+### HTTP Request
+
+`POST ...api/v1/users/me/dev_populate`
+
 ## (Dev) Deduct
 
 ```shell
