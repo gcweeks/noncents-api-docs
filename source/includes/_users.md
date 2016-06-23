@@ -70,6 +70,7 @@ curl -X POST "...api/v1/users"
   "agexes":[],
   "transactions": [],
   "vices":[],
+  "yearly_funds":[],
   "token": "GPFrZEfm4isNwvqPziJkqj3d"
 }
 ```
@@ -150,7 +151,8 @@ curl -X GET "...api/v1/users/me"
   "accounts":["..."],
   "agexes":["..."],
   "transactions": ["..."],
-  "vices":["..."]
+  "vices":["..."],
+  "yearly_funds":["..."]
 }
 ```
 
@@ -189,7 +191,8 @@ curl -X PUT "...api/v1/users/me"
   "accounts":["..."],
   "agexes":["..."],
   "transactions": ["..."],
-  "vices":["..."]
+  "vices":["..."],
+  "yearly_funds":["..."]
 }
 ```
 
@@ -263,7 +266,8 @@ curl -X PUT "...api/v1/users/me/vices"
   "vices": [
     "Nightlife",
     "Travel"
-  ]
+  ],
+  "yearly_funds":["..."]
 }
 ```
 
@@ -351,7 +355,8 @@ curl -X GET "...api/v1/users/me/account_connect"
   ],
   "agexes":["..."],
   "transactions": ["..."],
-  "vices":["..."]
+  "vices":["..."],
+  "yearly_funds":["..."]
 }
 ```
 
@@ -579,7 +584,8 @@ curl -X PUT "...api/v1/users/me/remove_accounts"
   "accounts":["..."],
   "agexes":["..."],
   "transactions": ["..."],
-  "vices": ["..."]
+  "vices": ["..."],
+  "yearly_funds":["..."]
 }
 ```
 
@@ -652,7 +658,8 @@ curl -X POST "...api/v1/users/me/refresh_transactions"
     },
     "..."
   ],
-  "vices":["..."]
+  "vices":["..."],
+  "yearly_funds":["..."]
 }
 ```
 
@@ -733,6 +740,17 @@ curl -X POST "...api/v1/users/me/dev_populate"
   "vices":[
     "CoffeeShops",
     "Electronics"
+  ],
+  "yearly_funds":[
+    {
+      "id":1,
+      "balance":"1.53",
+      "amount_invested": "0.53",
+      "year": 2016,
+      "user_id": 1,
+      "created_at": "2016-05-16T11:24:33.873-08:00",
+      "updated_at": "2016-05-16T11:24:33.873-08:00"
+    }
   ]
 }
 ```
@@ -794,13 +812,24 @@ curl -X POST "...api/v1/users/me/dev_deduct"
     },
     "..."
   ],
-  "vices":["..."]
+  "vices":["..."],
+  "yearly_funds":[
+    {
+      "id":1,
+      "balance":"230.72",
+      "amount_invested": "230.72",
+      "year": 2016,
+      "user_id": 1,
+      "created_at": "2016-02-19T11:24:33.873-08:00",
+      "updated_at": "2016-02-19T11:24:33.873-08:00"
+    }
+  ]
 }
 ```
 
-This route is only for development purposes and will be removed in the future. It travels to each of the transactions in User.transactions and "deducts" money from them, setting the transaction's 'invested' field to true and depositing (Transaction.amount * User.invest_percent/100) dollars into User.fund.invested and Transaction.amount_invested.
+This route is only for development purposes and will be removed in the future. It travels to each of the transactions in User.transactions and "deducts" money from them, setting the transaction's 'invested' field to true and depositing (Transaction.amount * User.invest_percent/100) dollars into User.fund.amount_invested, User.yearly_fund().amount_invested and Transaction.amount_invested.
 
-One exception is that if the transaction's 'backed_out' field is true, the 'invested' field will stay false and no money will be deposited into the fund.
+One exception is that if the Transaction's 'backed_out' field is true, the 'invested' field will stay false and no money will be deposited into the funds.
 
 ### HTTP Request
 
@@ -843,7 +872,8 @@ curl -X POST "...api/v1/users/me/dev_aggregate"
     "..."
   ],
   "transactions":["..."],
-  "vices":["..."]
+  "vices":["..."],
+  "yearly_funds":["..."]
 }
 ```
 

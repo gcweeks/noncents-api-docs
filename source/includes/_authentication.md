@@ -38,6 +38,7 @@ curl -X GET "...api/v1/auth?
   "agexes":["..."],
   "transactions": ["..."],
   "vices":["..."],
+  "yearly_funds":["..."],
   "token": "GPFrZEfm4isNwvqPziJkqj3d"
 }
 ```
