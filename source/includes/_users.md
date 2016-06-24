@@ -236,6 +236,37 @@ user[invest_percent] | Between 0 and 100 (Default 0) | The User's spend-to-save 
 user[goal] | Between 1 and 5500 (Default 230) | The User's monthly investment goal
 user[number] | None | The User's phone number
 
+## Get Current YearlyFund
+
+```shell
+curl -X GET "...api/v1/users/me/yearly_fund"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":1,
+  "balance":"1.53",
+  "amount_invested":"0.53",
+  "year": 2016,
+  "user_id":1,
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00"
+}
+```
+
+A YearlyFund model is just like a Fund model, except limited to only the
+deposits (and interest) for a given tax year. This method grabs the user's
+current YearlyFund model (that is, the YearlyFund model associated with the
+current tax year). If no YearlyFund model exists for the current tax year, one
+will be created as a result of this call.
+
+### HTTP Request
+
+`GET ...api/v1/users/me/yearly_fund`
+
 ## Set User Vices
 
 ```shell
@@ -789,7 +820,7 @@ curl -X POST "...api/v1/users/me/dev_deduct"
     "user_id": 1,
     "created_at":"2016-02-19T11:24:33.873-08:00",
     "updated_at":"2016-02-19T11:24:33.873-08:00",
-    "amount_invested": "230.72",
+    "amount_invested": "230.72"
   },
   "accounts":["..."],
   "agexes":["..."],
