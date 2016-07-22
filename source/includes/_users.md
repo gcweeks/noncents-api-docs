@@ -12,8 +12,8 @@ curl -X GET "...api/v1/check_email"
 
 ```json
 {
-  "email": "exists",
-  "email": "does not exist"
+  "email":"exists",
+  "email":"does not exist"
 }
 ```
 
@@ -58,20 +58,20 @@ curl -X POST "...api/v1/users"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "fund": {
-    "id": 1,
-    "balance": "0.0",
-    "user_id": 1,
+  "fund":{
+    "id":1,
+    "balance":"0.0",
+    "user_id":1,
     "created_at":"2016-02-19T11:24:33.873-08:00",
     "updated_at":"2016-02-19T11:24:33.873-08:00",
-    "amount_invested": "0.0"
+    "amount_invested":"0.0"
   },
   "accounts":[],
   "agexes":[],
-  "transactions": [],
+  "transactions":[],
   "vices":[],
   "yearly_funds":[],
-  "token": "GPFrZEfm4isNwvqPziJkqj3d"
+  "token":"GPFrZEfm4isNwvqPziJkqj3d"
 }
 ```
 
@@ -107,6 +107,10 @@ curl -X POST "...api/v1/users"
 ```
 
 Creates a new User. Accepts an email, a first name, and a last name, date of birth, and optionally a phone number. If successful, this call returns the created User model in addition to that user's token. If one of the required fields is absent, the email has already been taken, the email has an invalid format, the invest_percent is not between 0 and 100, or the password is less than 8 characters, a validation error will be returned with the error code "422 Unprocessable Entity"
+
+<aside class="notice">
+When the server returns a User whose Address has not been set, the JSON will not include an 'address' key.
+</aside>
 
 ### HTTP Request
 
@@ -148,9 +152,10 @@ curl -X GET "...api/v1/users/me"
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
   "fund":"...",
+  "address":"...",
   "accounts":["..."],
   "agexes":["..."],
-  "transactions": ["..."],
+  "transactions":["..."],
   "vices":["..."],
   "yearly_funds":["..."]
 }
@@ -188,9 +193,10 @@ curl -X PUT "...api/v1/users/me"
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
   "fund":"...",
+  "address":"...",
   "accounts":["..."],
   "agexes":["..."],
-  "transactions": ["..."],
+  "transactions":["..."],
   "vices":["..."],
   "yearly_funds":["..."]
 }
@@ -250,7 +256,7 @@ curl -X GET "...api/v1/users/me/yearly_fund"
   "id":1,
   "balance":"1.53",
   "amount_invested":"0.53",
-  "year": 2016,
+  "year":2016,
   "user_id":1,
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00"
@@ -291,10 +297,11 @@ curl -X PUT "...api/v1/users/me/vices"
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
   "fund":"...",
+  "address":"...",
   "accounts":["..."],
   "agexes":["..."],
-  "transactions": ["..."],
-  "vices": [
+  "transactions":["..."],
+  "vices":[
     "Nightlife",
     "Travel"
   ],
@@ -341,6 +348,92 @@ Parameter | Validations | Description
 --------- | ----------- | -----------
 vices[] | Equal to any of the Vices from the list above | The list of Vices to set for the User
 
+## Set User Address
+
+```shell
+curl -X PUT "...api/v1/users/me/address"
+  -d "address[line1]=123\ Cashmoney\ Lane&
+  address[line2]=Apt\ 420&
+  address[city]=Los\ Angeles&
+  address[state]=CA&
+  address[zip]=90024"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":1,
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
+  "fund":"...",
+  "address":{
+    "id":1,
+    "line1":"123 Cashmoney Lane",
+    "line2":"Apt 420",
+    "city":"Los Angeles",
+    "state":"CA",
+    "zip":"90024",
+    "user_id":1,
+    "created_at":"2016-07-20T16:53:30.027-07:00",
+    "updated_at":"2016-07-20T16:53:30.027-07:00"
+  },
+  "accounts":["..."],
+  "agexes":["..."],
+  "transactions":["..."],
+  "vices":["..."],
+  "yearly_funds":["..."]
+}
+```
+
+> Validation errors
+
+```json
+{
+  "line1":[
+    "can't be blank"
+  ],
+  "city":[
+    "can't be blank"
+  ],
+  "state":[
+    "can't be blank"
+  ],
+  "zip":[
+    "can't be blank"
+  ]
+}
+```
+
+Sets the authenticated User's Address. If the User does not already have an Address, omitting any of the required fields in the request will result in a validation error. If the User already has a full Address stored, however, you may submit a PUT request that only changes a particular field (as long as it does not set a required field to null).
+
+<aside class="notice">
+When the server returns a User whose Address has not been set, the JSON will not include an 'address' key.
+</aside>
+
+### HTTP Request
+
+`POST ...api/v1/users/me/address`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+address[line1] | Present  | The street address
+address[line2] | Optional | Second line for street address, for things like apartment numbers
+address[city]  | Present  | The city
+address[state] | Present  | The state
+address[zip]   | Present  | The postal code
+
 ## Plaid Connect
 
 ```shell
@@ -366,6 +459,7 @@ curl -X GET "...api/v1/users/me/account_connect"
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
   "fund":"...",
+  "address":"...",
   "accounts":[
     {
       "id":1,
@@ -385,7 +479,7 @@ curl -X GET "...api/v1/users/me/account_connect"
     "..."
   ],
   "agexes":["..."],
-  "transactions": ["..."],
+  "transactions":["..."],
   "vices":["..."],
   "yearly_funds":["..."]
 }
@@ -493,15 +587,15 @@ curl -X GET "...api/v1/users/me/account_connect"
 
 ```json
 {
-  "code": 1200,
-  "message": "Code 1200: invalid credentials. The username or password provided were not correct.",
-  "resolve": "The username or password provided were not correct."
+  "code":1200,
+  "message":"Code 1200: invalid credentials. The username or password provided were not correct.",
+  "resolve":"The username or password provided were not correct."
 }
 
 {
-  "code": 1203,
-  "message": "Code 1203: invalid mfa. The MFA response provided was not correct.",
-  "resolve": "The MFA response provided was not correct."
+  "code":1203,
+  "message":"Code 1203: invalid mfa. The MFA response provided was not correct.",
+  "resolve":"The MFA response provided was not correct."
 }
 ```
 
@@ -612,10 +706,11 @@ curl -X PUT "...api/v1/users/me/remove_accounts"
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
   "fund":"...",
+  "address":"...",
   "accounts":["..."],
   "agexes":["..."],
-  "transactions": ["..."],
-  "vices": ["..."],
+  "transactions":["..."],
+  "vices":["..."],
   "yearly_funds":["..."]
 }
 ```
@@ -668,6 +763,7 @@ curl -X POST "...api/v1/users/me/refresh_transactions"
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
   "fund":"...",
+  "address":"...",
   "accounts":["..."],
   "agexes":["..."],
   "transactions":[
@@ -722,13 +818,24 @@ curl -X POST "...api/v1/users/me/dev_populate"
   "invest_percent":10,
   "sync_date":null,
   "goal":230,
-  "fund": {
-    "id": 1,
-    "balance": "1.53",
-    "user_id": 1,
+  "fund":{
+    "id":1,
+    "balance":"1.53",
+    "user_id":1,
     "created_at":"2016-05-16T11:24:33.873-08:00",
     "updated_at":"2016-05-16T11:24:33.873-08:00",
-    "amount_invested": "0.53"
+    "amount_invested":"0.53"
+  },
+  "address":{
+    "id":1,
+    "line1":"123 Cashmoney Lane",
+    "line2":"Apt 420",
+    "city":"Los Angeles",
+    "state":"CA",
+    "zip":"90024",
+    "user_id":1,
+    "created_at":"2016-07-20T16:53:30.027-07:00",
+    "updated_at":"2016-07-20T16:53:30.027-07:00"
   },
   "accounts":[,
     {
@@ -776,11 +883,11 @@ curl -X POST "...api/v1/users/me/dev_populate"
     {
       "id":1,
       "balance":"1.53",
-      "amount_invested": "0.53",
-      "year": 2016,
-      "user_id": 1,
-      "created_at": "2016-05-16T11:24:33.873-08:00",
-      "updated_at": "2016-05-16T11:24:33.873-08:00"
+      "amount_invested":"0.53",
+      "year":2016,
+      "user_id":1,
+      "created_at":"2016-05-16T11:24:33.873-08:00",
+      "updated_at":"2016-05-16T11:24:33.873-08:00"
     }
   ]
 }
@@ -814,14 +921,15 @@ curl -X POST "...api/v1/users/me/dev_deduct"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "fund": {
-    "id": 1,
-    "balance": "230.72",
-    "user_id": 1,
+  "fund":{
+    "id":1,
+    "balance":"230.72",
+    "user_id":1,
     "created_at":"2016-02-19T11:24:33.873-08:00",
     "updated_at":"2016-02-19T11:24:33.873-08:00",
-    "amount_invested": "230.72"
+    "amount_invested":"230.72"
   },
+  "address":"...",
   "accounts":["..."],
   "agexes":["..."],
   "transactions":[
@@ -848,11 +956,11 @@ curl -X POST "...api/v1/users/me/dev_deduct"
     {
       "id":1,
       "balance":"230.72",
-      "amount_invested": "230.72",
-      "year": 2016,
-      "user_id": 1,
-      "created_at": "2016-02-19T11:24:33.873-08:00",
-      "updated_at": "2016-02-19T11:24:33.873-08:00"
+      "amount_invested":"230.72",
+      "year":2016,
+      "user_id":1,
+      "created_at":"2016-02-19T11:24:33.873-08:00",
+      "updated_at":"2016-02-19T11:24:33.873-08:00"
     }
   ]
 }
@@ -888,7 +996,8 @@ curl -X POST "...api/v1/users/me/dev_aggregate"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "fund": "...",
+  "fund":"...",
+  "address":"...",
   "accounts":["..."],
   "agexes":[
     {
