@@ -1023,7 +1023,44 @@ This route is only for development purposes and will be removed in the future. I
 
 This endpoint travels to each of the transactions in User.transactions and checks to see whether the Transaction was invested or not. If so, it looks for how much was invested and then adds that to the existing Agex model for the Transaction's associated month and vice, or creates a new Agex model if no such instance of it exists. Once completed, it removes all of those Transaction models (whether they were invested or not).
 
-
 ### HTTP Request
 
 `POST ...api/v1/users/me/dev_aggregate`
+
+## (Dev) Notify
+
+```shell
+curl -X POST "...api/v1/users/me/dev_notify"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "notification":"sent"
+}
+```
+
+> Notification format:
+
+```json
+{
+  "topic":"user_1",
+  "data":{
+    "hello": "world",
+    "fname": "Cash",
+    "lname": "Money"
+  }
+}
+```
+
+This route is only for development purposes and will be removed in the future. It sends a test notification to the authenticated User.
+
+The notification is currently sent via Firebase using their notification format. This format includes a `topic`, which is a string that the client device subscribes to and is made up of the prefix `user_` concatenated with that User's ID. In this way, rather than sending a notification to a particular device, a notification is sent to all devices that subscribe to that User ID. This avoids issues with sending notifications to the user when they have multiple devices, uninstalled and reinstalled the app, multiple users using one device, etc. as long as the client has subscribed to their proper `topic`.
+
+This format also includes a `data` field, which is essentially just a set of JSON for the client to interpret. For this test endpoint, the data field includes a "hello world" key-value pair, as well as key-value pairs for the authenticated User's first and last name fields.
+
+### HTTP Request
+
+`POST ...api/v1/users/me/dev_notify`
