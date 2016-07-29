@@ -20,15 +20,19 @@ search: true
 
 Welcome to the Noncents API documentation.
 
-The app for the API is located at the following URL:
+The app for the production API is located at the following URL:
 
 `https://app.dimention.co/`
 
-The app can also be found at the AWS Elastic Beanstalk URL:
+The production app can also be found at the AWS Elastic Beanstalk URL:
 
 `https://dimention-env-vd3evffjxi.elasticbeanstalk.com/`
 
-The API is located at `/api` and is versioned (`/api/v1`, etc). Because there is only one version at the moment, this means you should access all API calls at the following URL:
+The development API is located at the following URL:
+
+`https://noncents-env-dev.us-east-1.elasticbeanstalk.com`
+
+The API is located at `/api` and is versioned (`/api/v1`, etc). Because there is only one version at the moment, this means you should access all production API calls at the following URL:
 
 `https://app.dimention.co/api/v1`
 
@@ -36,7 +40,7 @@ In the proceeding documentation, this URL will be abbreviated as:
 
 `...api/v1/some_route`
 
-To get a feel for the API, try the sample requests on the bar to the right.
+To get a feel for the API, try the sample requests given in the bar to the right.
 
 ## Sample GET
 
