@@ -1,6 +1,6 @@
 # Errors
 
-The Dimention API uses the following error codes:
+The Noncents API uses the following error codes:
 
 Error Code | Meaning
 ---------- | -------

@@ -1,6 +1,6 @@
 # Authentication
 
-The Dimention API uses API keys to allow access to the API. To acquire an API key, you will need to verify your authenticity by sending an email and password to the server at `/auth`. If successful, the server will return a JSON User model containing a token that will allow for further API authentication. Look at the bar on the right for more information.
+The Noncents API uses API keys to allow access to the API. To acquire an API key, you will need to verify your authenticity by sending an email and password to the server at `/auth`. If successful, the server will return a JSON User model containing a token that will allow for further API authentication. Look at the bar on the right for more information.
 
 The API expects for the auth token to be included in authenticated API requests to the server. You should include this in a header that looks like the following:
 

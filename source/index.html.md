@@ -1,8 +1,8 @@
 ---
-title: Dimention API Reference
+title: Noncents API Reference
 
 toc_footers:
-  - <a href='#'>Dimention</a>
+  - <a href='#'>Noncents</a>
 
 includes:
   - authentication
@@ -18,7 +18,7 @@ search: true
 
 # Introduction
 
-Welcome to the Dimention API documentation.
+Welcome to the Noncents API documentation.
 
 The app for the API is located at the following URL:
 
