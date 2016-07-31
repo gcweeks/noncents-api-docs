@@ -8,7 +8,7 @@ curl -X GET "...api/v1/check_email"
   -H "Authorization: TOKEN"
 ```
 
-> Response:
+> Possible Responses:
 
 ```json
 {
@@ -796,6 +796,41 @@ This route pulls the user's latest transactions. Transactions are pulled for eve
 
 `POST ...api/v1/users/me/refresh_transactions`
 
+## Register for FCM Notifications
+
+```shell
+curl -X POST "...api/v1/users/me/register_push_token"
+  -d "token=1234..."
+  -H "Authorization: TOKEN"
+```
+
+> Possible Responses:
+
+```json
+{
+  "status":"registered",
+  "status":"failed to register"
+}
+```
+
+> Validation errors
+
+```json
+{
+  "token":[
+    "is required"
+  ]
+}
+```
+
+Use this route to register for FCM push notifications. FCM uses the concept of "Groups" to organize each of the devices associated with a given user. In this way, rather than sending a notification to a particular device, a notification is sent to all devices that are associated with that User ID. This avoids issues with sending notifications to the user when they have multiple devices or have uninstalled the app and reinstalled it on a new device.
+
+To associate a given device with an FCM Group, you must obtain an FCM device registration token and POST it to this route. Then, any notification for your user will be sent to the `user_<User.id>` FCM Group, which will contain all of the device registration tokens you have POSTed to this route as that User, sending push notifications the corresponding devices.
+
+### HTTP Request
+
+`POST ...api/v1/users/me/register_push_token`
+
 ## (Dev) Populate Sample Data
 
 ```shell
@@ -1046,7 +1081,7 @@ curl -X POST "...api/v1/users/me/dev_notify"
 
 ```json
 {
-  "topic":"user_1",
+  "to":"user_1",
   "data":{
     "hello": "world",
     "fname": "Cash",
@@ -1057,9 +1092,9 @@ curl -X POST "...api/v1/users/me/dev_notify"
 
 This route is only for development purposes and will be removed in the future. It sends a test notification to the authenticated User.
 
-The notification is currently sent via Firebase using their notification format. This format includes a `topic`, which is a string that the client device subscribes to and is made up of the prefix `user_` concatenated with that User's ID. In this way, rather than sending a notification to a particular device, a notification is sent to all devices that subscribe to that User ID. This avoids issues with sending notifications to the user when they have multiple devices, uninstalled and reinstalled the app, multiple users using one device, etc. as long as the client has subscribed to their proper `topic`.
+The notification is currently sent via Firebase using their notification format. This format includes a `data` field, which is essentially just a set of JSON for the client to interpret. For this test endpoint, the data field includes a "hello world" key-value pair, as well as key-value pairs for the authenticated User's first and last name fields.
 
-This format also includes a `data` field, which is essentially just a set of JSON for the client to interpret. For this test endpoint, the data field includes a "hello world" key-value pair, as well as key-value pairs for the authenticated User's first and last name fields.
+In order to actually receive notifications, you must first use the `POST .../api/v1/users/me/register_push_token` route to register your FCM token for push notifications. See the `Register for FCM Notifications` section of the documentation for more details.
 
 ### HTTP Request
 
