@@ -1,5 +1,16 @@
 # Transactions
 
+## Archive
+
+Transactions are automatically archived by the server. During the weekly deduction, if a Transaction belongs to the previous month, it is archived. This allows Transactions to be included in the weekly deduction without being prematurely archived.
+
+Archiving is designed to appear like the Transaction was essentially deleted, but avoids several pitfalls of deleting transactions every month, namely:
+
+1. Analytics on past Transaction data.
+2. Pulling in new Transactions from Plaid after they had already been deleted (in which case there would be no other way to know we had already pulled in that Transaction).
+
+Behind the scenes, archiving is simply the act of setting a boolean flag, but the rest of the server processing is designed to hide this from the client API for the most straightforward experience. Regardless, it has been included in the API documentation because it occasionally comes up during topics like error handling or analytics.
+
 ## Back Out
 
 ```shell
@@ -32,12 +43,13 @@ curl _X POST "...api/v1/transactions/:id/back_out"
 ```json
 {
   "transaction":[
+    "has already been archived",
     "has already been invested"
   ]
 }
 ```
 
-Flags a given transaction as "backed out", meaning that when it comes time to deduct money from the user's account to deposit into their fund, the target transaction will be skipped.
+Flags a given transaction as "backed out", meaning that when it comes time to deduct money from the user's account to deposit into their fund, the target transaction will be skipped. If a transaction has been archived or invested, it cannot be backed out.
 
 ### HTTP Request
 
@@ -49,10 +61,10 @@ Parameter | Description
 --------- | -----------
 :id | The ID of the Transaction
 
-## Invest
+## Restore
 
 ```shell
-curl _X POST "...api/v1/transactions/:id/invest"
+curl _X POST "...api/v1/transactions/:id/restore"
   -H "Authorization: TOKEN"
 ```
 
@@ -81,16 +93,17 @@ curl _X POST "...api/v1/transactions/:id/invest"
 ```json
 {
   "transaction":[
+    "has already been archived",
     "has already been invested"
   ]
 }
 ```
 
-The opposite of backing out of a transaction, this endpoint re-flags a given transaction as "not backed out", meaning that when it comes time to deduct money from the user's account to deposit into their fund, the target transaction will be invested at a percentage given by User.invest_percent.
+The opposite of backing out of a transaction. This endpoint re-flags a given transaction as "not backed out", meaning that when it comes time to deduct money from the user's account to deposit into their fund, the target transaction will be invested at a percentage given by User.invest_percent. If a transaction has been archived or invested, it cannot be restored.
 
 ### HTTP Request
 
-`POST ...api/v1/transactions/:id/invest`
+`POST ...api/v1/transactions/:id/restore`
 
 ### Response
 
