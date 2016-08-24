@@ -225,7 +225,7 @@ curl -X PUT "...api/v1/users/me"
 }
 ```
 
-Updates certain fields of the authenticated User. Validations only apply to fields send to the server for update. All other fields will remain the same. Some fields, just as date of birth, cannot be changed. See the provided "URL Parameters" table to see which fields can be modified.
+Updates certain fields of the authenticated User. Validations only apply to fields sent to the server for update. All other fields will remain the same. Some fields, such as email and date of birth, cannot be changed. See the provided "URL Parameters" table to see which fields can be modified.
 
 ### HTTP Request
 
@@ -920,6 +920,46 @@ To associate a given device with an FCM Group, you must obtain an FCM device reg
 ### HTTP Request
 
 `POST ...api/v1/users/me/register_push_token`
+
+## Create Dwolla Customer
+
+```shell
+curl -X POST "...api/v1/users/me/dwolla"
+  -d "ssn=123-45-6789&address[line1]=..."
+  -H "Authorization: TOKEN"
+```
+
+> Validation errors
+
+```json
+{
+  "ssn":[
+    "is required"
+  ],
+  "address":[
+    "is required"
+  ]
+}
+```
+
+Use this route to create a Dwolla Customer object for the authed User. A Dwolla Customer is required to perform any transactions between accounts, as a Dwolla Funding Source (bank account) needs to be attached to an existing Dwolla Customer. Because we use Plaid, Dwolla funding sources are automatically verified. However, this is not true for Customers, which need to be verified using a physical address, SSN, and IP address. The IP address is determined based on the IP address that made the server call, but the SSN and physical address must be passed in as parameters to this endpoint. One exception is that if the authenticated User already has a stored Address, that address will be used if the `address` parameter is missing from the payload. If the `address` parameter is present regardless, that information will be used to update the User's stored Address.
+
+Note that while the SSN is passed in as `ssn`, an address field is passed in as `address[line1]`, etc. Also note that while the address is saved on the server, the SSN is merely passed to Dwolla and forgotten at the end of the server call.
+
+### HTTP Request
+
+`POST ...api/v1/users/me/dwolla`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+ssn | Present  | Social security number
+address[line1] | Present  | The street address
+address[line2] | Optional | Second line for street address, for things like apartment numbers
+address[city]  | Present  | The city
+address[state] | Present  | The state
+address[zip]   | Present  | The postal code
 
 ## (Dev) Populate Sample Data
 
