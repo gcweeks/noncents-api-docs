@@ -47,7 +47,7 @@ curl -X POST "...api/v1/users"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
   "number":"+15555552016",
@@ -59,9 +59,9 @@ curl -X POST "...api/v1/users"
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
   "fund":{
-    "id":1,
+    "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
     "balance":"0.0",
-    "user_id":1,
+    "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
     "created_at":"2016-02-19T11:24:33.873-08:00",
     "updated_at":"2016-02-19T11:24:33.873-08:00",
     "amount_invested":"0.0"
@@ -140,7 +140,7 @@ curl -X GET "...api/v1/users/me"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
   "number":"+15555552016",
@@ -179,7 +179,7 @@ curl -X PUT "...api/v1/users/me"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"New",
   "lname":"Name",
   "fname":"Cash",
@@ -253,11 +253,11 @@ curl -X GET "...api/v1/users/me/yearly_fund"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "balance":"1.53",
   "amount_invested":"0.53",
   "year":2016,
-  "user_id":1,
+  "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00"
 }
@@ -285,7 +285,7 @@ curl -X PUT "...api/v1/users/me/vices"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
   "number":"+15555552016",
@@ -364,7 +364,7 @@ curl -X PUT "...api/v1/users/me/address"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
   "number":"+15555552016",
@@ -377,13 +377,13 @@ curl -X PUT "...api/v1/users/me/address"
   "goal":420,
   "fund":"...",
   "address":{
-    "id":1,
+    "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
     "line1":"123 Cashmoney Lane",
     "line2":"Apt 420",
     "city":"Los Angeles",
     "state":"CA",
     "zip":"90024",
-    "user_id":1,
+    "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
     "created_at":"2016-07-20T16:53:30.027-07:00",
     "updated_at":"2016-07-20T16:53:30.027-07:00"
   },
@@ -447,7 +447,7 @@ curl -X GET "...api/v1/users/me/account_connect"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
   "number":"+15555552016",
@@ -462,8 +462,8 @@ curl -X GET "...api/v1/users/me/account_connect"
   "address":"...",
   "accounts":[
     {
-      "id":1,
-      "user_id":1,
+      "id":"3dce9e2f-5321-431d-bd67-9ab3db32a4d3",
+      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
       "created_at":"2016-02-19T11:25:18.179-08:00",
       "updated_at":"2016-02-19T11:25:18.179-08:00",
       "plaid_id":"QPO8Jo8vdDHMepg41PBwckXm4KdK1yUdmXOwK",
@@ -841,7 +841,7 @@ curl -X POST "...api/v1/users/me/refresh_transactions"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
   "number":"+15555552016",
@@ -858,16 +858,16 @@ curl -X POST "...api/v1/users/me/refresh_transactions"
   "agexes":["..."],
   "transactions":[
     {
-      "id":1,
+      "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
       "plaid_id":"KdDjmojBERUKx3JkDdO5IaRJdZeZKNuK4bnKJ1",
       "date":"2014-06-23",
       "amount":"2307.15",
       "name":"Apple Store",
       "category_id":"19013000",
-      "account_id":1,
+      "account_id":"3dce9e2f-5321-431d-bd67-9ab3db32a4d3",
       "created_at":"2016-02-19T11:24:33.873-08:00",
       "updated_at":"2016-02-19T11:24:33.873-08:00",
-      "user_id":1,
+      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
       "invested":false,
       "backed_out":true,
       "amount_invested":"0.0",
@@ -972,7 +972,7 @@ curl -X POST "...api/v1/users/me/dev_populate"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
   "number":"+15555552016",
@@ -984,28 +984,28 @@ curl -X POST "...api/v1/users/me/dev_populate"
   "sync_date":null,
   "goal":230,
   "fund":{
-    "id":1,
+    "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
     "balance":"1.53",
-    "user_id":1,
+    "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
     "created_at":"2016-05-16T11:24:33.873-08:00",
     "updated_at":"2016-05-16T11:24:33.873-08:00",
     "amount_invested":"0.53"
   },
   "address":{
-    "id":1,
+    "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
     "line1":"123 Cashmoney Lane",
     "line2":"Apt 420",
     "city":"Los Angeles",
     "state":"CA",
     "zip":"90024",
-    "user_id":1,
+    "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
     "created_at":"2016-07-20T16:53:30.027-07:00",
     "updated_at":"2016-07-20T16:53:30.027-07:00"
   },
   "accounts":[,
     {
-      "id":3,
-      "user_id":1,
+      "id":"3dce9e2f-5321-431d-bd67-9ab3db32a4d3",
+      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
       "created_at":"2016-05-16T11:24:33.873-08:00",
       "updated_at":"2016-05-16T11:24:33.873-08:00",
       "plaid_id":"QPO8Jo8vdDHMepg41PBwckXm4KdK1yUdmXOwK",
@@ -1022,16 +1022,16 @@ curl -X POST "...api/v1/users/me/dev_populate"
   ],
   "transactions":[
     {
-      "id":1,
+      "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
       "plaid_id":"foo",
       "date":"2015-05-16",
       "amount":"13.37",
       "name":"Python Sticker",
       "category_id":"19013000",
-      "account_id":1,
+      "account_id":"3dce9e2f-5321-431d-bd67-9ab3db32a4d3",
       "created_at":"2016-05-16T11:24:33.873-08:00",
       "updated_at":"2016-05-16T11:24:33.873-08:00",
-      "user_id":1,
+      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
       "invested":false,
       "backed_out":false,
       "amount_invested":"0.0",
@@ -1046,11 +1046,11 @@ curl -X POST "...api/v1/users/me/dev_populate"
   ],
   "yearly_funds":[
     {
-      "id":1,
+      "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
       "balance":"1.53",
       "amount_invested":"0.53",
       "year":2016,
-      "user_id":1,
+      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
       "created_at":"2016-05-16T11:24:33.873-08:00",
       "updated_at":"2016-05-16T11:24:33.873-08:00"
     }
@@ -1075,7 +1075,7 @@ curl -X POST "...api/v1/users/me/dev_deduct"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
   "number":"+15555552016",
@@ -1087,9 +1087,9 @@ curl -X POST "...api/v1/users/me/dev_deduct"
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
   "fund":{
-    "id":1,
+    "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
     "balance":"230.72",
-    "user_id":1,
+    "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
     "created_at":"2016-02-19T11:24:33.873-08:00",
     "updated_at":"2016-02-19T11:24:33.873-08:00",
     "amount_invested":"230.72"
@@ -1099,16 +1099,16 @@ curl -X POST "...api/v1/users/me/dev_deduct"
   "agexes":["..."],
   "transactions":[
     {
-      "id":1,
+      "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
       "plaid_id":"KdDjmojBERUKx3JkDdO5IaRJdZeZKNuK4bnKJ1",
       "date":"2014-06-23",
       "amount":"2307.15",
       "name":"Apple Store",
       "category_id":"19013000",
-      "account_id":1,
+      "account_id":"3dce9e2f-5321-431d-bd67-9ab3db32a4d3",
       "created_at":"2016-02-19T11:24:33.873-08:00",
       "updated_at":"2016-02-19T11:24:33.873-08:00",
-      "user_id":1,
+      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
       "invested":true,
       "backed_out":false,
       "amount_invested":"230.72",
@@ -1119,11 +1119,11 @@ curl -X POST "...api/v1/users/me/dev_deduct"
   "vices":["..."],
   "yearly_funds":[
     {
-      "id":1,
+      "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
       "balance":"230.72",
       "amount_invested":"230.72",
       "year":2016,
-      "user_id":1,
+      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
       "created_at":"2016-02-19T11:24:33.873-08:00",
       "updated_at":"2016-02-19T11:24:33.873-08:00"
     }
@@ -1150,7 +1150,7 @@ curl -X POST "...api/v1/users/me/dev_aggregate"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
   "number":"+15555552016",
@@ -1166,8 +1166,8 @@ curl -X POST "...api/v1/users/me/dev_aggregate"
   "accounts":["..."],
   "agexes":[
     {
-      "id":1,
-      "user_id":1,
+      "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
+      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
       "amount":"230.72",
       "month":"2016-02-01",
       "created_at":"2016-02-19T11:24:33.873-08:00",
