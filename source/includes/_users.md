@@ -682,11 +682,14 @@ answer | Present unless 'mask' or 'type' are present | Answer to the MFA
 mask | Present unless 'answer' or 'type' are present | MFA device selection based on device mask
 type | Present unless 'mask' or 'answer' are present | The bank password
 
-## Remove Accounts
+## Set Accounts
 
 ```shell
-curl -X PUT "...api/v1/users/me/remove_accounts"
-  -d "accounts[]=1234&accounts[]=5678"
+curl -X PUT "...api/v1/users/me/accounts"
+  -d "source=9bf406fc-cc64-45e2-b536-df9f1b0caa4a&
+      deposit=3dce9e2f-5321-431d-bd67-9ab3db32a4d3&
+      tracking[]=9bf406fc-cc64-45e2-b536-df9f1b0caa4a&
+      tracking[]=32ebc551-7365-408c-bad4-c820a44a8860"
   -H "Authorization: TOKEN"
 ```
 
@@ -694,7 +697,7 @@ curl -X PUT "...api/v1/users/me/remove_accounts"
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
   "number":"+15555552016",
@@ -705,6 +708,8 @@ curl -X PUT "...api/v1/users/me/remove_accounts"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "source_account_id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
+  "deposit_account_id":"32ebc551-7365-408c-bad4-c820a44a8860",
   "fund":"...",
   "address":"...",
   "accounts":["..."],
@@ -719,26 +724,111 @@ curl -X PUT "...api/v1/users/me/remove_accounts"
 
 ```json
 {
-  "accounts":[
-    "are required",
-    "are in incorrect format"
+  "general":[
+    "Missing parameter. Options are one or more of: \"source\", \"deposit\", \"tracking\""
+  ],
+  "source":[
+    "Account not found",
+    "is incorrectly formatted - must be of type String"
+  ],
+  "deposit":[
+    "Account not found",
+    "is incorrectly formatted - must be of type String"
+  ],
+  "tracking":[
+    "Account not found",
+    "is incorrectly formatted - must be of type Array"
   ]
 }
 ```
 
-After acquiring all of the user's bank accounts, they may not want to track them all. For instance, they may want to track spending from a checking account, but not from a savings account at the same bank. This endpoint lets the user select only the accounts they want to keep and discard the rest.
+After acquiring all of the user's bank accounts, they need to specify which Accounts they want to track and which they want to use for deduction. For instance, they may want to track spending from a checking account, but not from a savings account at the same bank, and they may want to deduct from their checking account into their savings account every week.
 
-To specify which accounts to remove, pass in an array `accounts` that contains the ID of each account you want to remove.
+To specify which Accounts to track, pass in an array `tracking[]` that contains the ID of each Account you want to track. To specify an Account to deduct money into each week, pass in the key `deposit` with the ID of the Account as its value. Similarly, for the Account to deduct money from, use the `source` key.
+
+You may use this route do set multiple Accounts at once. For example, you can track multiple Accounts and add the source/deposit Accounts all in one call. This route is also idempotent, meaning that adding Accounts as source/deposit/tracking multiple times will not have any adverse effects. Similarly, passing in a new source/deposit Account will override the previous ones. Passing in a new tracking Account will add it to the array of Accounts to track. If instead you wish to remove a tracking Account, use the `DELETE` REST call for this same route. For more information on deleting Accounts, see the relevant section in the documentation.
 
 ### HTTP Request
 
-`PUT ...api/v1/users/me/remove_accounts`
+`PUT ...api/v1/users/me/accounts`
 
 ### URL Parameters
 
 Parameter | Validations | Description
 --------- | ----------- | -----------
-accounts[] | Required | An array of Account IDs for Accounts you wish to delete
+source | String | ID of Account to deduct money from
+deposit | String | ID of Account to deposit money into
+accounts[] | Array | IDs for Accounts you wish to track
+
+## Remove Accounts
+
+```shell
+curl -X DELETE "...api/v1/users/me/accounts"
+  -d "source=anything&
+      deposit=anything&
+      tracking[]=9bf406fc-cc64-45e2-b536-df9f1b0caa4a&
+      tracking[]=32ebc551-7365-408c-bad4-c820a44a8860"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
+  "fname":"Cash",
+  "lname":"Money",
+  "number":"+15555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
+  "source_account_id":null,
+  "deposit_account_id":null,
+  "fund":"...",
+  "address":"...",
+  "accounts":["..."],
+  "agexes":["..."],
+  "transactions":["..."],
+  "vices":["..."],
+  "yearly_funds":["..."]
+}
+```
+
+> Validation errors
+
+```json
+{
+  "general":[
+    "Missing parameter. Options are one or more of: \"source\", \"deposit\", \"tracking\""
+  ],
+  "tracking":[
+    "Account not found",
+    "is incorrectly formatted - must be of type Array"
+  ]
+}
+```
+
+Use this route to stop tracking the spending on certain Accounts, or to remove a weekly deduction source or deposit account (keep in mind this will prevent the User from being able to save money).
+
+To specify which Accounts to stop tracking, pass in an array `tracking[]` that contains the ID of each Account you want to stop tracking. To remove a deduction or source Account, pass in the key `deposit` or `source`, respectively, with any value (the value is ignored).
+
+You may use this route do remove multiple Accounts at once. For example, you can stop tracking multiple Accounts and remove the source/deposit Accounts all in one call. This route is also idempotent, meaning that removing Accounts as source/deposit/tracking multiple times will not have any adverse effects.
+
+### HTTP Request
+
+`DELETE ...api/v1/users/me/accounts`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+source | None | Remove the User's source Account
+deposit | None | Remove the User's deposit Account
+accounts[] | Array | IDs for Accounts you wish to stop tracking
 
 ## Refresh Transactions
 
