@@ -463,7 +463,6 @@ curl -X GET "...api/v1/users/me/account_connect"
   "accounts":[
     {
       "id":"3dce9e2f-5321-431d-bd67-9ab3db32a4d3",
-      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
       "created_at":"2016-02-19T11:25:18.179-08:00",
       "updated_at":"2016-02-19T11:25:18.179-08:00",
       "plaid_id":"QPO8Jo8vdDHMepg41PBwckXm4KdK1yUdmXOwK",
@@ -471,10 +470,14 @@ curl -X GET "...api/v1/users/me/account_connect"
       "institution":"fake_institution",
       "available_balance":null,
       "current_balance":null,
-      "account_num":9900009606,
-      "routing_num":21000021,
       "account_type":"depository",
-      "account_subtype":"savings"
+      "account_subtype":"savings",
+      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
+      "bank_id":"e780c643-5006-4730-8055-383ae8e97978",
+      "tracking":false,
+      "dwolla_id":"97ba8ac0-27ef-45d9-a611-d2a4896b8332",
+      "account_num":"9900009606",
+      "routing_num":"021000021"
     },
     "..."
   ],
@@ -1005,18 +1008,21 @@ curl -X POST "...api/v1/users/me/dev_populate"
   "accounts":[,
     {
       "id":"3dce9e2f-5321-431d-bd67-9ab3db32a4d3",
-      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
-      "created_at":"2016-05-16T11:24:33.873-08:00",
-      "updated_at":"2016-05-16T11:24:33.873-08:00",
+      "created_at":"2016-02-19T11:25:18.179-08:00",
+      "updated_at":"2016-02-19T11:25:18.179-08:00",
       "plaid_id":"QPO8Jo8vdDHMepg41PBwckXm4KdK1yUdmXOwK",
       "name":"Plaid Savings",
       "institution":"fake_institution",
       "available_balance":null,
       "current_balance":null,
-      "account_num":0,
-      "routing_num":0,
       "account_type":"depository",
-      "account_subtype":"savings"
+      "account_subtype":"savings",
+      "user_id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
+      "bank_id":"e780c643-5006-4730-8055-383ae8e97978",
+      "tracking":false,
+      "dwolla_id":"97ba8ac0-27ef-45d9-a611-d2a4896b8332",
+      "account_num":"9900009606",
+      "routing_num":"021000021"
     }
     "..."
   ],
