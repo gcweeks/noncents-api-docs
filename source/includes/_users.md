@@ -39,8 +39,8 @@ curl -X POST "...api/v1/users"
   user[password]=Ca5hM0n3y&
   user[dob]=1990-01-20&
   user[invest_percent]=10&
-  user[number]=%2b15555552016&
   user[goal]=420"
+  user[phone]=5555552016&
 ```
 
 > Successful response:
@@ -50,7 +50,6 @@ curl -X POST "...api/v1/users"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -58,6 +57,7 @@ curl -X POST "...api/v1/users"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "phone":"5555552016",
   "fund":{
     "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
     "balance":"0.0",
@@ -102,6 +102,9 @@ curl -X POST "...api/v1/users"
   ],
   "goal":[
     "is not included in the list"
+  ],
+  "phone":[
+    "is invalid"
   ]
 }
 ```
@@ -127,7 +130,7 @@ user[password] | Minimum 8 characters, 1 uppercase letter, 1 lowercase letter, 1
 user[dob] | Present | The User's date of birth
 user[invest_percent] | Between 0 and 100 (Default 0) | The User's spend-to-save percentage
 user[goal] | Between 1 and 5500 (Default 230) | The User's monthly investment goal
-user[number] | None | The User's phone number
+user[phone] | 10 digits | The User's phone number
 
 ## Get Authenticated User
 
@@ -143,7 +146,6 @@ curl -X GET "...api/v1/users/me"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -151,6 +153,7 @@ curl -X GET "...api/v1/users/me"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "phone":"5555552016",
   "fund":"...",
   "address":"...",
   "accounts":["..."],
@@ -184,7 +187,6 @@ curl -X PUT "...api/v1/users/me"
   "lname":"Name",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -192,6 +194,7 @@ curl -X PUT "...api/v1/users/me"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "phone":"5555552016",
   "fund":"...",
   "address":"...",
   "accounts":["..."],
@@ -221,6 +224,9 @@ curl -X PUT "...api/v1/users/me"
   ],
   "goal":[
     "is not included in the list"
+  ],
+  "phone":[
+    "is invalid"
   ]
 }
 ```
@@ -240,7 +246,7 @@ user[lname] | Present | The User's last name
 user[password] | Minimum 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number | The User's password
 user[invest_percent] | Between 0 and 100 (Default 0) | The User's spend-to-save percentage
 user[goal] | Between 1 and 5500 (Default 230) | The User's monthly investment goal
-user[number] | None | The User's phone number
+user[phone] | 10 digits | The User's phone number
 
 ## Get Current YearlyFund
 
@@ -288,7 +294,6 @@ curl -X PUT "...api/v1/users/me/vices"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -296,6 +301,7 @@ curl -X PUT "...api/v1/users/me/vices"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "phone":"5555552016",
   "fund":"...",
   "address":"...",
   "accounts":["..."],
@@ -367,7 +373,6 @@ curl -X PUT "...api/v1/users/me/address"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -375,6 +380,7 @@ curl -X PUT "...api/v1/users/me/address"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "phone":"5555552016",
   "fund":"...",
   "address":{
     "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
@@ -450,7 +456,6 @@ curl -X GET "...api/v1/users/me/account_connect"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -458,6 +463,7 @@ curl -X GET "...api/v1/users/me/account_connect"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "phone":"5555552016",
   "fund":"...",
   "address":"...",
   "accounts":[
@@ -703,7 +709,6 @@ curl -X PUT "...api/v1/users/me/accounts"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -713,6 +718,7 @@ curl -X PUT "...api/v1/users/me/accounts"
   "goal":420,
   "source_account_id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
   "deposit_account_id":"32ebc551-7365-408c-bad4-c820a44a8860",
+  "phone":"5555552016",
   "fund":"...",
   "address":"...",
   "accounts":["..."],
@@ -781,7 +787,6 @@ curl -X DELETE "...api/v1/users/me/accounts"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -789,6 +794,7 @@ curl -X DELETE "...api/v1/users/me/accounts"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "phone":"5555552016",
   "source_account_id":null,
   "deposit_account_id":null,
   "fund":"...",
@@ -847,7 +853,6 @@ curl -X POST "...api/v1/users/me/refresh_transactions"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -855,6 +860,7 @@ curl -X POST "...api/v1/users/me/refresh_transactions"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "phone":"5555552016",
   "fund":"...",
   "address":"...",
   "accounts":["..."],
@@ -978,7 +984,6 @@ curl -X POST "...api/v1/users/me/dev_populate"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-05-16T11:24:33.873-08:00",
   "updated_at":"2016-05-16T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -986,6 +991,7 @@ curl -X POST "...api/v1/users/me/dev_populate"
   "invest_percent":10,
   "sync_date":null,
   "goal":230,
+  "phone":"5555552016",
   "fund":{
     "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
     "balance":"1.53",
@@ -1084,7 +1090,6 @@ curl -X POST "...api/v1/users/me/dev_deduct"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -1092,6 +1097,7 @@ curl -X POST "...api/v1/users/me/dev_deduct"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "phone":"5555552016",
   "fund":{
     "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
     "balance":"230.72",
@@ -1159,7 +1165,6 @@ curl -X POST "...api/v1/users/me/dev_aggregate"
   "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -1167,6 +1172,7 @@ curl -X POST "...api/v1/users/me/dev_aggregate"
   "invest_percent":10,
   "sync_date":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
+  "phone":"5555552016",
   "fund":"...",
   "address":"...",
   "accounts":["..."],

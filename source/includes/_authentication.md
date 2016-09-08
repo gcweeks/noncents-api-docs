@@ -25,7 +25,6 @@ curl -X GET "...api/v1/auth?
   "id":1,
   "fname":"Cash",
   "lname":"Money",
-  "number":"+15555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
@@ -39,7 +38,8 @@ curl -X GET "...api/v1/auth?
   "transactions": ["..."],
   "vices":["..."],
   "yearly_funds":["..."],
-  "token": "GPFrZEfm4isNwvqPziJkqj3d"
+  "token": "GPFrZEfm4isNwvqPziJkqj3d",
+  "phone":"5555552016"
 }
 ```
 
