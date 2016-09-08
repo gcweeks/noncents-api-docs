@@ -970,6 +970,37 @@ address[city]  | Present  | The city
 address[state] | Present  | The state
 address[zip]   | Present  | The postal code
 
+## Send Slack Support Ticket
+
+```shell
+curl -X POST "...api/v1/users/me/support"
+  -d "text=Hello..."
+  -H "Authorization: TOKEN"
+```
+
+> Validation errors
+
+```json
+{
+  "text":[
+    "is required",
+    "must be 1000 characters or less"
+  ]
+}
+```
+
+Use this route to send a support ticket to the Noncents #support Slack channel. Any block of text may be passed in, but that text must be limited to 1000 characters or less. The User's identifying information is passed along automatically, so there is no need to include anything in the payload other than the support text.
+
+### HTTP Request
+
+`POST ...api/v1/users/me/support`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+text | No more than 1000 characters  | Body of support message
+
 ## (Dev) Populate Sample Data
 
 ```shell
