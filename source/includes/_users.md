@@ -1272,3 +1272,18 @@ In order to actually receive notifications, you must first use the `POST .../api
 ### HTTP Request
 
 `POST ...api/v1/users/me/dev_notify`
+
+## (Dev) Email
+
+```shell
+curl -X POST "...api/v1/users/me/dev_email"
+  -H "Authorization: TOKEN"
+```
+
+This route is only for development purposes and will be removed in the future. It sends a test email to the email address of the authenticated User.
+
+The email is currently sent via AWS SES and contains a simple welcome message formatted in both HTML and plain text, depending on the recipient's desired format. The email is currently sent from donotreply@noncents.co, and until we are upgraded beyond the AWS SES sandbox, all destination email addresses will first need to be verified via AWS before they can receive mail from this route.
+
+### HTTP Request
+
+`POST ...api/v1/users/me/dev_email`
