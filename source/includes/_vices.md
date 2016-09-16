@@ -3,7 +3,7 @@
 ## Get a List of Vices
 
 ```shell
-curl -X GET "...api/v1/vices"
+curl -X GET "...v1/vices"
 ```
 
 > Successful response:
@@ -24,8 +24,8 @@ curl -X GET "...api/v1/vices"
 ]
 ```
 
-Retrieves a list of all of the accepted Vice strings for use with `POST ...api/v1/users/me/vices`
+Retrieves a list of all of the accepted Vice strings for use with `POST ...v1/users/me/vices`
 
 ### HTTP Request
 
-`GET ...api/v1/vices`
+`GET ...v1/vices`

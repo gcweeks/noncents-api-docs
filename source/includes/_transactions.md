@@ -14,7 +14,7 @@ Behind the scenes, archiving is simply the act of setting a boolean flag, but th
 ## Back Out
 
 ```shell
-curl _X POST "...api/v1/transactions/:id/back_out"
+curl _X POST "...v1/transactions/:id/back_out"
   -H "Authorization: TOKEN"
 ```
 
@@ -53,7 +53,7 @@ Flags a given transaction as "backed out", meaning that when it comes time to de
 
 ### HTTP Request
 
-`POST ...api/v1/transactions/:id/back_out`
+`POST ...v1/transactions/:id/back_out`
 
 ### Response
 
@@ -64,7 +64,7 @@ Parameter | Description
 ## Restore
 
 ```shell
-curl _X POST "...api/v1/transactions/:id/restore"
+curl _X POST "...v1/transactions/:id/restore"
   -H "Authorization: TOKEN"
 ```
 
@@ -103,7 +103,7 @@ The opposite of backing out of a transaction. This endpoint re-flags a given tra
 
 ### HTTP Request
 
-`POST ...api/v1/transactions/:id/restore`
+`POST ...v1/transactions/:id/restore`
 
 ### Response
 

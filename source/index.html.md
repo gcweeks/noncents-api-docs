@@ -20,32 +20,34 @@ search: true
 
 Welcome to the Noncents API documentation.
 
-The app for the production API is located at the following URL:
+The app for the production API is currently located at the following URL:
 
 `https://app.dimention.co/`
 
-The production app can also be found at the AWS Elastic Beanstalk URL:
-
-`https://dimention-env-vd3evffjxi.elasticbeanstalk.com/`
-
 The development API is located at the following URL:
 
-`https://noncents-env-dev.us-east-1.elasticbeanstalk.com`
+`https://app.noncents.co/`
 
-The API is located at `/api` and is versioned (`/api/v1`, etc). Because there is only one version at the moment, this means you should access all production API calls at the following URL:
+The new production API will be located at:
 
-`https://app.dimention.co/api/v1`
+`https://api.noncents.co/`
+
+For now, the new production API can be used as a development API for testing compliance with the new server setup.
+
+The API is is versioned (`/v1`, `/v2`, etc). Because there is only one version at the moment, this means you should access all production API calls at the following URL:
+
+`https://app.dimention.co/v1`
 
 In the proceeding documentation, this URL will be abbreviated as:
 
-`...api/v1/some_route`
+`...v1/some_route`
 
 To get a feel for the API, try the sample requests given in the bar to the right.
 
 ## Sample GET
 
 ```shell
-curl "...api/v1"
+curl "...v1"
 ```
 
 > Response:
@@ -60,12 +62,12 @@ This endpoint returns a constant JSON string and can be used to test API connect
 
 ### HTTP Request
 
-`POST ...api/v1`
+`POST ...v1`
 
 ## Sample POST
 
 ```shell
-curl "...api/v1"
+curl "...v1"
   -d "foo=bar"
 ```
 
@@ -81,4 +83,4 @@ This endpoint returns the body of the POST request you send, and can be used to 
 
 ### HTTP Request
 
-`POST ...api/v1`
+`POST ...v1`

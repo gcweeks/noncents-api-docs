@@ -3,7 +3,7 @@
 ## Check Email
 
 ```shell
-curl -X GET "...api/v1/check_email"
+curl -X GET "...v1/check_email"
   -d "email=cashmoney@gmail.com"
   -H "Authorization: TOKEN"
 ```
@@ -21,7 +21,7 @@ Check to see if a User exists with the given email
 
 ### HTTP Request
 
-`GET ...api/v1/check_email`
+`GET ...v1/check_email`
 
 ### Query Parameters
 
@@ -32,7 +32,7 @@ email | Present | The User's email
 ## Sign Up
 
 ```shell
-curl -X POST "...api/v1/users"
+curl -X POST "...v1/users"
   -d "user[fname]=Cash&
   user[lname]=Money&
   user[email]=cashmoney%40gmail.com&
@@ -117,7 +117,7 @@ When the server returns a User whose Address has not been set, the JSON will not
 
 ### HTTP Request
 
-`POST ...api/v1/users`
+`POST ...v1/users`
 
 ### Query Parameters
 
@@ -135,7 +135,7 @@ user[phone] | 10 digits | The User's phone number
 ## Get Authenticated User
 
 ```shell
-curl -X GET "...api/v1/users/me"
+curl -X GET "...v1/users/me"
   -H "Authorization: TOKEN"
 ```
 
@@ -168,12 +168,12 @@ Retrieves the authenticated User
 
 ### HTTP Request
 
-`GET ...api/v1/users/me`
+`GET ...v1/users/me`
 
 ## Update Authenticated User
 
 ```shell
-curl -X PUT "...api/v1/users/me"
+curl -X PUT "...v1/users/me"
   -d "user[fname]=New&user[lname]=Name"
   -H "Authorization: TOKEN"
 ```
@@ -235,7 +235,7 @@ Updates certain fields of the authenticated User. Validations only apply to fiel
 
 ### HTTP Request
 
-`PUT ...api/v1/users/me`
+`PUT ...v1/users/me`
 
 ### URL Parameters
 
@@ -251,7 +251,7 @@ user[phone] | 10 digits | The User's phone number
 ## Get Current YearlyFund
 
 ```shell
-curl -X GET "...api/v1/users/me/yearly_fund"
+curl -X GET "...v1/users/me/yearly_fund"
   -H "Authorization: TOKEN"
 ```
 
@@ -277,12 +277,12 @@ will be created as a result of this call.
 
 ### HTTP Request
 
-`GET ...api/v1/users/me/yearly_fund`
+`GET ...v1/users/me/yearly_fund`
 
 ## Set User Vices
 
 ```shell
-curl -X PUT "...api/v1/users/me/vices"
+curl -X PUT "...v1/users/me/vices"
   -d "vices[]=Travel&vices[]=Nightlife"
   -H "Authorization: TOKEN"
 ```
@@ -327,7 +327,7 @@ curl -X PUT "...api/v1/users/me/vices"
 }
 ```
 
-Sets the authenticated User's Vices. The list of available Vices is given below, and can optionally be obtained by making a call to `GET ...api/v1/vices`. It is worth noting that this call will overwrite the User's existing Vices, so if the goal is to add one Vice, you must first obtain the original list of Vices and then send the augmented list of Vices as a payload to this endpoint. To clear all Vices, simply pass in a Vice of 'None'.
+Sets the authenticated User's Vices. The list of available Vices is given below, and can optionally be obtained by making a call to `GET ...v1/vices`. It is worth noting that this call will overwrite the User's existing Vices, so if the goal is to add one Vice, you must first obtain the original list of Vices and then send the augmented list of Vices as a payload to this endpoint. To clear all Vices, simply pass in a Vice of 'None'.
 
 ### List of Vices
 
@@ -346,7 +346,7 @@ Sets the authenticated User's Vices. The list of available Vices is given below,
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/vices`
+`POST ...v1/users/me/vices`
 
 ### URL Parameters
 
@@ -357,7 +357,7 @@ vices[] | Equal to any of the Vices from the list above | The list of Vices to s
 ## Set User Address
 
 ```shell
-curl -X PUT "...api/v1/users/me/address"
+curl -X PUT "...v1/users/me/address"
   -d "address[line1]=123\ Cashmoney\ Lane&
   address[line2]=Apt\ 420&
   address[city]=Los\ Angeles&
@@ -428,7 +428,7 @@ When the server returns a User whose Address has not been set, the JSON will not
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/address`
+`POST ...v1/users/me/address`
 
 ### URL Parameters
 
@@ -443,7 +443,7 @@ address[zip]   | Present  | The postal code
 ## Plaid Connect
 
 ```shell
-curl -X GET "...api/v1/users/me/account_connect"
+curl -X GET "...v1/users/me/account_connect"
   -d "username=cashmoney&password=Ca5hM0ney&type=wells"
   -H "Authorization: TOKEN"
 ```
@@ -608,7 +608,7 @@ curl -X GET "...api/v1/users/me/account_connect"
 }
 ```
 
-Gets all accounts associated with bank credentials and stores them in the User model and returns them to the client. This call is expected to be followed by a call to remove unnecessary accounts, `POST .../api/v1/users/me/remove_accounts`. Otherwise, it will be assumed that the User wants to use all accounts associated with their credentials.
+Gets all accounts associated with bank credentials and stores them in the User model and returns them to the client. This call is expected to be followed by a call to remove unnecessary accounts, `POST ...v1/users/me/remove_accounts`. Otherwise, it will be assumed that the User wants to use all accounts associated with their credentials.
 
 To perform this call, provide a bank type (listed in the table below), username, and password. If the bank type is 'usaa', you must additionally provide a pin.
 
@@ -633,7 +633,7 @@ wells | No | None
 
 ### HTTP Request
 
-`GET ...api/v1/users/me/account_connect`
+`GET ...v1/users/me/account_connect`
 
 ### URL Parameters
 
@@ -647,7 +647,7 @@ pin | Optional | The bank pin (usaa only)
 ## Plaid MFA
 
 ```shell
-curl -X GET "...api/v1/users/me/account_mfa"
+curl -X GET "...v1/users/me/account_mfa"
   -d "access_token=9b97b...265ac&answer=12345687"
   -H "Authorization: TOKEN"
 ```
@@ -673,7 +673,7 @@ curl -X GET "...api/v1/users/me/account_mfa"
 }
 ```
 
-If a call `GET .../api/v1/users/me/account_connect` requires Multi-Factor Authentication (MFA), you will instead have to use this route to successfully connect with the user's bank accounts.
+If a call `GET ...v1/users/me/account_connect` requires Multi-Factor Authentication (MFA), you will instead have to use this route to successfully connect with the user's bank accounts.
 
 To submit an answer to an MFA question or code, use the `answer` field.
 
@@ -681,7 +681,7 @@ To specify which particular device you would like to receive your code (if doing
 
 ### HTTP Request
 
-`GET ...api/v1/users/me/account_mfa`
+`GET ...v1/users/me/account_mfa`
 
 ### URL Parameters
 
@@ -694,7 +694,7 @@ type | Present unless 'mask' or 'answer' are present | The bank password
 ## Set Accounts
 
 ```shell
-curl -X PUT "...api/v1/users/me/accounts"
+curl -X PUT "...v1/users/me/accounts"
   -d "source=9bf406fc-cc64-45e2-b536-df9f1b0caa4a&
       deposit=3dce9e2f-5321-431d-bd67-9ab3db32a4d3&
       tracking[]=9bf406fc-cc64-45e2-b536-df9f1b0caa4a&
@@ -759,7 +759,7 @@ You may use this route do set multiple Accounts at once. For example, you can tr
 
 ### HTTP Request
 
-`PUT ...api/v1/users/me/accounts`
+`PUT ...v1/users/me/accounts`
 
 ### URL Parameters
 
@@ -772,7 +772,7 @@ accounts[] | Array | IDs for Accounts you wish to track
 ## Remove Accounts
 
 ```shell
-curl -X DELETE "...api/v1/users/me/accounts"
+curl -X DELETE "...v1/users/me/accounts"
   -d "source=anything&
       deposit=anything&
       tracking[]=9bf406fc-cc64-45e2-b536-df9f1b0caa4a&
@@ -829,7 +829,7 @@ You may use this route do remove multiple Accounts at once. For example, you can
 
 ### HTTP Request
 
-`DELETE ...api/v1/users/me/accounts`
+`DELETE ...v1/users/me/accounts`
 
 ### URL Parameters
 
@@ -842,7 +842,7 @@ accounts[] | Array | IDs for Accounts you wish to stop tracking
 ## Refresh Transactions
 
 ```shell
-curl -X POST "...api/v1/users/me/refresh_transactions"
+curl -X POST "...v1/users/me/refresh_transactions"
   -H "Authorization: TOKEN"
 ```
 
@@ -893,12 +893,12 @@ This route pulls the user's latest transactions. Transactions are pulled for eve
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/refresh_transactions`
+`POST ...v1/users/me/refresh_transactions`
 
 ## Register for FCM Notifications
 
 ```shell
-curl -X POST "...api/v1/users/me/register_push_token"
+curl -X POST "...v1/users/me/register_push_token"
   -d "token=1234..."
   -H "Authorization: TOKEN"
 ```
@@ -928,12 +928,12 @@ To associate a given device with an FCM Group, you must obtain an FCM device reg
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/register_push_token`
+`POST ...v1/users/me/register_push_token`
 
 ## Create Dwolla Customer
 
 ```shell
-curl -X POST "...api/v1/users/me/dwolla"
+curl -X POST "...v1/users/me/dwolla"
   -d "ssn=123-45-6789&address[line1]=..."
   -H "Authorization: TOKEN"
 ```
@@ -957,7 +957,7 @@ Note that while the SSN is passed in as `ssn`, an address field is passed in as 
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/dwolla`
+`POST ...v1/users/me/dwolla`
 
 ### URL Parameters
 
@@ -973,7 +973,7 @@ address[zip]   | Present  | The postal code
 ## Send Slack Support Ticket
 
 ```shell
-curl -X POST "...api/v1/users/me/support"
+curl -X POST "...v1/users/me/support"
   -d "text=Hello..."
   -H "Authorization: TOKEN"
 ```
@@ -993,7 +993,7 @@ Use this route to send a support ticket to the Noncents #support Slack channel. 
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/support`
+`POST ...v1/users/me/support`
 
 ### URL Parameters
 
@@ -1004,7 +1004,7 @@ text | No more than 1000 characters  | Body of support message
 ## (Dev) Populate Sample Data
 
 ```shell
-curl -X POST "...api/v1/users/me/dev_populate"
+curl -X POST "...v1/users/me/dev_populate"
   -H "Authorization: TOKEN"
 ```
 
@@ -1105,12 +1105,12 @@ This route is only for development purposes and will be removed in the future. I
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/dev_populate`
+`POST ...v1/users/me/dev_populate`
 
 ## (Dev) Deduct
 
 ```shell
-curl -X POST "...api/v1/users/me/dev_deduct"
+curl -X POST "...v1/users/me/dev_deduct"
   -H "Authorization: TOKEN"
 ```
 
@@ -1180,12 +1180,12 @@ One exception is that if the Transaction's 'backed_out' field is true, the 'inve
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/dev_deduct`
+`POST ...v1/users/me/dev_deduct`
 
 ## (Dev) Aggregate Old Transactions
 
 ```shell
-curl -X POST "...api/v1/users/me/dev_aggregate"
+curl -X POST "...v1/users/me/dev_aggregate"
   -H "Authorization: TOKEN"
 ```
 
@@ -1233,12 +1233,12 @@ This endpoint travels to each of the transactions in User.transactions and check
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/dev_aggregate`
+`POST ...v1/users/me/dev_aggregate`
 
 ## (Dev) Notify
 
 ```shell
-curl -X POST "...api/v1/users/me/dev_notify"
+curl -X POST "...v1/users/me/dev_notify"
   -H "Authorization: TOKEN"
 ```
 
@@ -1267,16 +1267,16 @@ This route is only for development purposes and will be removed in the future. I
 
 The notification is currently sent via Firebase using their notification format. This format includes a `data` field, which is essentially just a set of JSON for the client to interpret. For this test endpoint, the data field includes a "hello world" key-value pair, as well as key-value pairs for the authenticated User's first and last name fields.
 
-In order to actually receive notifications, you must first use the `POST .../api/v1/users/me/register_push_token` route to register your FCM token for push notifications. See the `Register for FCM Notifications` section of the documentation for more details.
+In order to actually receive notifications, you must first use the `POST ...v1/users/me/register_push_token` route to register your FCM token for push notifications. See the `Register for FCM Notifications` section of the documentation for more details.
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/dev_notify`
+`POST ...v1/users/me/dev_notify`
 
 ## (Dev) Email
 
 ```shell
-curl -X POST "...api/v1/users/me/dev_email"
+curl -X POST "...v1/users/me/dev_email"
   -H "Authorization: TOKEN"
 ```
 
@@ -1286,4 +1286,4 @@ The email is currently sent via AWS SES and contains a simple welcome message fo
 
 ### HTTP Request
 
-`POST ...api/v1/users/me/dev_email`
+`POST ...v1/users/me/dev_email`

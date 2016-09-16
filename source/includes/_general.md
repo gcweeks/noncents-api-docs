@@ -5,7 +5,7 @@ The following are general API calls that don't fall into any other category.
 ## iOS Version
 
 ```shell
-curl -X GET "...api/v1/version/ios"
+curl -X GET "...v1/version/ios"
 ```
 
 > Response:
@@ -20,4 +20,4 @@ Retrieves the minimum version of the iOS app that is compatible with the current
 
 ### HTTP Request
 
-`GET ...api/v1/version/ios`
+`GET ...v1/version/ios`

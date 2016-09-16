@@ -13,7 +13,7 @@ You must replace <code>TOKEN</code> with your personal API key.
 ## Get Token
 
 ```shell
-curl -X GET "...api/v1/auth?
+curl -X GET "...v1/auth?
   user[email]=cashmoney%40gmail.com&
   user[password]=Ca5hM0n3y"
 ```
@@ -61,7 +61,7 @@ Accepts an email and password and, if successful, returns the User model (contai
 
 ### HTTP Request
 
-`GET ...api/v1/auth`
+`GET ...v1/auth`
 
 ### Query Parameters
 
