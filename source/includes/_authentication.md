@@ -22,24 +22,27 @@ curl -X GET "...v1/auth?
 
 ```json
 {
-  "id":1,
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
   "fname":"Cash",
   "lname":"Money",
-  "created_at":"2016-02-19T11:24:33.873-08:00",
-  "updated_at":"2016-02-19T11:24:33.873-08:00",
   "email":"cashmoney@gmail.com",
   "dob":"1990-01-20",
   "invest_percent":10,
-  "sync_date":"2016-02-19T11:24:33.873-08:00",
+  "transactions_refreshed_at":"2016-02-19T11:24:33.873-08:00",
   "goal":420,
-  "fund":"...",
+  "phone":"5555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
   "accounts":["..."],
+  "address":"...",
   "agexes":["..."],
-  "transactions": ["..."],
+  "deposit_account":"...",
+  "fund":"...",
+  "source_account":"...",
+  "transactions":["..."],
   "vices":["..."],
   "yearly_funds":["..."],
-  "token": "GPFrZEfm4isNwvqPziJkqj3d",
-  "phone":"5555552016"
+  "token":"GPFrZEfm4isNwvqPziJkqj3d"
 }
 ```
 

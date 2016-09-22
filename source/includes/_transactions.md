@@ -22,18 +22,17 @@ curl _X POST "...v1/transactions/:id/back_out"
 
 ```json
 {
-  "id":1,
-  "plaid_id":"KdDjmojBERUKx3JkDdO5IaRJdZeZKNuK4bnKJ1",
+  "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
   "date":"2014-06-23",
   "amount":"2307.15",
   "name":"Apple Store",
   "category_id":"19013000",
-  "account_id":1,
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
-  "user_id":1,
   "invested":false,
   "backed_out":true,
+  "amount_invested":"0.0",
+  "account_id":"3dce9e2f-5321-431d-bd67-9ab3db32a4d3",
   "vice":"Electronics"
 }
 ```
@@ -72,18 +71,17 @@ curl _X POST "...v1/transactions/:id/restore"
 
 ```json
 {
-  "id":1,
-  "plaid_id":"KdDjmojBERUKx3JkDdO5IaRJdZeZKNuK4bnKJ1",
+  "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
   "date":"2014-06-23",
   "amount":"2307.15",
   "name":"Apple Store",
   "category_id":"19013000",
-  "account_id":1,
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
-  "user_id":1,
   "invested":false,
-  "backed_out":true,
+  "backed_out":false,
+  "amount_invested":"0.0",
+  "account_id":"3dce9e2f-5321-431d-bd67-9ab3db32a4d3",
   "vice":"Electronics"
 }
 ```
