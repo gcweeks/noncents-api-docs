@@ -72,3 +72,75 @@ Parameter | Validations | Description
 --------- | ------- | -----------
 user[email] | Present | The User's email.
 user[password] | Present, correct | The User's password
+
+## Request Password Reset
+
+```shell
+curl -X POST "...v1/reset_password"
+  -d "user[email]=cashmoney%40gmail.com"
+```
+
+> Validation errors
+
+```json
+{
+  "email":[
+    "can't be blank"
+  ]
+}
+```
+
+Generates a password reset token and sends it in an email to the email address given. The user then has 10 minutes to enter that token and reset their password, which is accomplished using the `PUT ...v1/update_password` route.
+
+### HTTP Request
+
+`POST ...v1/reset_password`
+
+### Query Parameters
+
+Parameter | Validations | Description
+--------- | ------- | -----------
+user[email] | Present | The User's email.
+
+## Update Password
+
+```shell
+curl -X PUT "...v1/update_password"
+  -d "token=19knZR&
+  user[email]=cashmoney%40gmail.com&
+  user[password]=NewPa55word"
+```
+
+> Validation errors
+
+```json
+{
+  "token":[
+    "is required",
+    "is incorrect",
+    "is expired",
+    "has never been requested"
+  ],
+  "email":[
+    "is required"
+  ],
+  "password":[
+    "is required",
+    "is invalid"
+  ]
+}
+```
+
+Allows a user with a password reset token to reset their account password. The reset token is sent to the user via email, and they have 10 minutes from the time it was requested with `POST ...v1/reset_password` to use the token before it expires. This route requires the email of the user as well as the new password, which must obey the standard password validation constraints.
+
+### HTTP Request
+
+`PUT ...v1/update_password`
+
+### Query Parameters
+
+Parameter | Validations | Description
+--------- | ------- | -----------
+token | Present | The password reset token
+user[email] | Present | The User's email.
+user[password] | Minimum 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number | The User's new password
