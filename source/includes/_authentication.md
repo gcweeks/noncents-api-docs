@@ -33,6 +33,7 @@ curl -X GET "...v1/auth?
   "phone":"5555552016",
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "dwolla_status":"verified",
   "accounts":["..."],
   "address":"...",
   "agexes":["..."],
