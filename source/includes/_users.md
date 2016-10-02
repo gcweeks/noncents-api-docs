@@ -968,6 +968,34 @@ curl -X POST "...v1/users/me/dwolla"
   -H "Authorization: TOKEN"
 ```
 
+> Successful response:
+
+```json
+{
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
+  "fname":"Cash",
+  "lname":"Money",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "transactions_refreshed_at":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
+  "phone":"5555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "dwolla_status":"verified",
+  "accounts":["..."],
+  "address":"...",
+  "agexes":["..."],
+  "deposit_account":"...",
+  "fund":"...",
+  "source_account":"...",
+  "transactions":["..."],
+  "vices":["..."],
+  "yearly_funds":["..."]
+}
+```
+
 > Validation errors
 
 ```json
@@ -985,6 +1013,19 @@ Use this route to create a Dwolla Customer object for the authed User. A Dwolla 
 
 Note that while the SSN is passed in as `ssn`, an address field is passed in as `address[line1]`, etc. Also note that while the address is saved on the server, the SSN is merely passed to Dwolla and forgotten at the end of the server call.
 
+This call will return the user model, complete with their Dwolla Customer status `dwolla_status`. This will be equal to one of the following statuses:
+
+Status | Resolution
+------ | -----------
+verified | No further action necessary
+retry | Must resubmit information, either due to typo or misinformation
+document | Must submit image of passport, driver's license or ID card
+suspended | No further action possible via server, must contact Dwolla
+
+The `retry` status can be resolved by using this same route by passing in the extra parameter `retry=true` and entering correct information.
+
+The `document` status must be resolved by making a `POST` call to the `...v1/users/me/dwolla_document` route with an image of the user's identification as well as the type of that identification. The image must be in one of the following file formats: `.jpg`, `.jpeg`, `.png`, `.tif`, or `.pdf`. The type can be one of: `passport`, `license`, or `idCard`.
+
 ### HTTP Request
 
 `POST ...v1/users/me/dwolla`
@@ -999,6 +1040,69 @@ address[line2] | Optional | Second line for street address, for things like apar
 address[city]  | Present  | The city
 address[state] | Present  | The state
 address[zip]   | Present  | The postal code
+retry | Optional | Whether the client is retrying Dwolla verification
+
+## Submit Dwolla Document
+
+```shell
+curl -X POST "...v1/users/me/dwolla_document"
+  -d "type=license"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
+  "fname":"Cash",
+  "lname":"Money",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "transactions_refreshed_at":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
+  "phone":"5555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "dwolla_status":"document",
+  "accounts":["..."],
+  "address":"...",
+  "agexes":["..."],
+  "deposit_account":"...",
+  "fund":"...",
+  "source_account":"...",
+  "transactions":["..."],
+  "vices":["..."],
+  "yearly_funds":["..."]
+}
+```
+
+> Validation errors
+
+```json
+{
+  "file":[
+    "is required"
+  ],
+  "document":[
+    "is required"
+  ]
+}
+```
+
+Use this route to submit an identifying document to verify a Dwolla Customer. This is required if the client has previously called the `POST ...v1/users/me/dwolla` route and received a `User.dwolla_status` of `document`. The document image must be in one of the following file formats: `.jpg`, `.jpeg`, `.png`, `.tif`, or `.pdf`. The document type must be one of: `passport`, `license`, or `idCard`.
+
+### HTTP Request
+
+`POST ...v1/users/me/dwolla_document`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+file | formatted as jpg, jpeg, png, tif, or pdf | Image of identifying document
+type | 'passport', 'license', or 'idCard'  | The type of identification
 
 ## Send Slack Support Ticket
 
