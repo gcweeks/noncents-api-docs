@@ -450,16 +450,18 @@ address[city]  | Present  | The city
 address[state] | Present  | The state
 address[zip]   | Present  | The postal code
 
-## Plaid Connect
+## Create Plaid Account
 
 ```shell
-curl -X GET "...v1/users/me/account_connect"
-  -d "username=cashmoney&password=Ca5hM0ney&type=wells"
+curl -X POST "...v1/users/me/plaid"
+  -d "username=cashmoney&
+  password=Ca5hM0ney&
+  product=connect&
+  type=wells"
   -H "Authorization: TOKEN"
 ```
 
 > Successful response:
-> (Note that the "accounts" array will be populated with a list of all accounts at the given bank. To remove unneeded accounts, use users/me/remove_accounts)
 
 ```json
 {
@@ -517,7 +519,7 @@ curl -X GET "...v1/users/me/account_connect"
 }
 ```
 
-> If the bank requires a code that they sent to the user's email/phone (chase/bofa only), you will instead be given a list of devices so the user can select which device they want the code sent to
+> If the bank requires a code that they sent to the user's email/phone (Chase only), you will instead be given a list of devices so the user can select which device they want the code sent to
 
 ```json
 {
@@ -536,7 +538,7 @@ curl -X GET "...v1/users/me/account_connect"
 }
 ```
 
-> You can then use this information to send the proper call to the users/me/account_mfa route using the given "mask" or "type" fields
+> You can then use this information to send the proper call to the POST users/me/plaid_mfa route using the given "mask" or "type" fields
 
 ```json
 ```
@@ -580,7 +582,7 @@ curl -X GET "...v1/users/me/account_connect"
 }
 ```
 
-> You will need to submit a GET request to the users/me/account_mfa route
+> You will need to submit a POST request to the users/me/plaid_mfa route
 
 ```json
 ```
@@ -595,8 +597,19 @@ curl -X GET "...v1/users/me/account_connect"
   "password":[
     "is required"
   ],
+  "product":[
+    "is required",
+    "must be one of: connect, auth"
+  ],
   "type":[
     "is required"
+    "<auth> must be one of: bbt, bofa, capone360, schwab, chase, citi,
+      fidelity, nfcu, pnc, suntrust, td, us, usaa, wells"
+    "<connect> must be one of: amex, bbt, bofa, chase, citi, nfcu, suntrust,
+      td, us, usaa, wells"
+  ],
+  "pin":[
+    "is required for usaa"
   ]
 }
 ```
@@ -617,51 +630,54 @@ curl -X GET "...v1/users/me/account_connect"
 }
 ```
 
-Gets all accounts associated with bank credentials and stores them in the User model and returns them to the client. This call is expected to be followed by a call to remove unnecessary accounts, `POST ...v1/users/me/remove_accounts`. Otherwise, it will be assumed that the User wants to use all accounts associated with their credentials.
+Gets all accounts associated with bank credentials and stores them in the User model and returns them to the client. To perform this call, provide a bank type (listed in the table below), username, password, and product. The product can either be 'auth' or 'connect' (explained below), the names of Plaid's methods of authentication. If the bank type is 'usaa', you must additionally provide a pin. This call is expected to be followed by a call to add these accounts as tracking accounts or as source/deposit accounts for deduction using `PUT ...v1/users/me/accounts`.
 
-To perform this call, provide a bank type (listed in the table below), username, and password. If the bank type is 'usaa', you must additionally provide a pin.
+In deciding between 'auth' and 'connect', Auth retrieves full account info, including account numbers, so that they may be used with Dwolla to perform movement of money. Connect allows for the retrieval of transactions from the account. Therefore, if the client wishes to both track the spending of a particular account as well as use that account as a source/deposit account for deductions, they most authenticate using both Connect and Auth. To do this, first use this route to authenticate with one product, then use the `POST users/me/plaid_upgrade` route to upgrade the account with the new privilege. In the case that you need both products, Plaid recommends initially authorizing with Auth and then following up with Connect in order to minimize the amount of duplicate MFA needed.
 
 ### List of Bank Types
 
-Type | PIN | MFA
----- | --- | ---
-amex | No | None
-bofa | No | Question-based MFA (3 questions) or code-based MFA (SafePass)
-capone360 | No | Question-based MFA (1 to 3 questions)
-schwab | No | None
-chase | No | Code-based MFA
-citi | No | Question-based MFA and selection-based MFA
-fidelity | No | None
-nfcu | No | None
-pnc | No | Question-based MFA (3 questions)
-suntrust | No | None
-td | No | Question-based MFA (1 to 3 questions)
-us | No | Question-based MFA (1 to 3 questions)
-usaa | Yes | Question-based MFA (3 questions)
-wells | No | None
+Name | Type | PIN | MFA
+---- | --- | --- | ---
+American Express | amex | No | None
+BB&T | bbt | No | Question-based MFA (3 questions)
+Bank of America | bofa | No | Question-based MFA (3 questions)
+Capital One 360 | capone360 | No | Question-based MFA (1 to 3 questions)
+Charles Schwab | schwab | No | None
+Chase | chase | No | Code-based MFA
+Citi | citi | No | Question-based MFA and selection-based MFA (auth only)
+Fidelity | fidelity | No | None
+Navy Federal Credit Union | nfcu | No | None
+PNC | pnc | No | Question-based MFA (3 questions)
+SunTrust | suntrust | No | None
+TD Bank | td | No | Question-based MFA (3 questions)
+US Bank | us | No | Question-based MFA (1 to 3 questions)
+USAA | usaa | Yes | Question-based MFA (3 questions)
+Wells Fargo | wells | No | None
 
 ### HTTP Request
 
-`GET ...v1/users/me/account_connect`
+`POST ...v1/users/me/plaid`
 
 ### URL Parameters
 
 Parameter | Validations | Description
 --------- | ----------- | -----------
-type | Present | The bank name
 username | Present | The bank username
 password | Present | The bank password
-pin | Optional | The bank pin (usaa only)
+product | 'auth' or 'connect' | Whether to Auth (deduction) or Connect (tracking)
+type | Present | The bank name
+pin | usaa only | The bank pin
 
-## Plaid MFA
+## Upgrade Plaid Account
 
 ```shell
-curl -X GET "...v1/users/me/account_mfa"
-  -d "access_token=9b97b...265ac&answer=12345687"
+curl -X POST "...v1/users/me/plaid"
+  -d "product=auth&
+      account=9bf4...aa4a"
   -H "Authorization: TOKEN"
 ```
 
-> The JSON response and errors here are identical to those of users/me/account_connect. To see a list of everything that can be returned, visit the users/me/account_connect section of the API documentation
+> The JSON response and errors here are identical to those of POST users/me/plaid. To see a list of everything that can be returned, visit the POST users/me/plaid section of the API documentation.
 
 ```json
 ```
@@ -670,6 +686,61 @@ curl -X GET "...v1/users/me/account_mfa"
 
 ```json
 {
+  "product":[
+    "is required"
+    "must be one of: connect, auth"
+  ],
+  "account":[
+    "is required",
+    "does not exist",
+    "cannot be upgraded",
+    "already has Auth",
+    "already has Connect"
+  ]
+}
+```
+
+Attempts to upgrade a User's Account to give more information. For example, a Connect account only allows for tracking transactions, but does not give full account numbers and therefore cannot be used with Dwolla to perform source/deposit deduction. To get full account numbers, the Account must be upgraded to contain the Auth product. Similarly, the client may wish to upgrade an Auth account to have Connect privileges so that they have access to that account's transactions.
+
+It is worth noting that it is the User's Bank, not Account, that is actually being upgraded. This means that if a single Bank contains both a checking and savings account, and those accounts have been initially authenticated with the Auth product, when a client upgrades their checking Account to have the Connect product as well, the associated savings Account will also be given the Connect product.
+
+### HTTP Request
+
+`POST ...v1/users/me/plaid_upgrade`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+product | 'auth' or 'connect' | Whether to Auth (deduction) or Connect (tracking)
+account | Present | The ID of the Account you wish to upgrade
+
+## Submit Plaid MFA
+
+```shell
+curl -X POST "...v1/users/me/plaid_mfa"
+  -d "access_token=9b97b...265ac&
+  product=connect&
+  answer=12345687"
+  -H "Authorization: TOKEN"
+```
+
+> The JSON response and errors here are identical to those of POST users/me/plaid. To see a list of everything that can be returned, visit the POST users/me/plaid section of the API documentation.
+
+```json
+```
+
+> Validation errors
+
+```json
+{
+  "access_token":[
+    "is required"
+  ],
+  "product":[
+    "is required",
+    "must be one of: connect, auth"
+  ],
   "answer":[
     "is required (unless selecting MFA method)"
   ],
@@ -682,20 +753,24 @@ curl -X GET "...v1/users/me/account_mfa"
 }
 ```
 
-If a call `GET ...v1/users/me/account_connect` requires Multi-Factor Authentication (MFA), you will instead have to use this route to successfully connect with the user's bank accounts.
+If a call `POST ...v1/users/me/plaid` requires Multi-Factor Authentication (MFA), you will instead have to use this route to successfully connect with the user's bank accounts.
 
 To submit an answer to an MFA question or code, use the `answer` field.
 
-To specify which particular device you would like to receive your code (if doing code-based MFA, i.e. bofa/chase), use the `mask` or `type` fields. The `type` field lets you specify the device type, i.e. "phone" or "email". `mask` lets you get more specific. For example, if the user has multiple phones, you can specify the correct phone number by using `mask=xxx-xxx-5309` in your call. To get a better idea of your options, make sure you've read the returned JSON list of device options in the account_connect section of the API documentation.
+To specify which particular device you would like to receive your code (if doing code-based MFA, i.e. Chase), use the `mask` or `type` fields. The `type` field lets you specify the device type, i.e. "phone" or "email". `mask` lets you get more specific. For example, if the user has multiple phones, you can specify the correct phone number by using `mask=xxx-xxx-5309` in your call. To get a better idea of your options, make sure you've read the returned JSON list of device options in the 'POST users/me/plaid' section of the API documentation.
+
+Just like the 'Post users/me/plaid' route, this call may either return a User model complete with the newly plaid-authenticated accounts, or it may return more MFA.
 
 ### HTTP Request
 
-`GET ...v1/users/me/account_mfa`
+`POST ...v1/users/me/plaid_mfa`
 
 ### URL Parameters
 
 Parameter | Validations | Description
 --------- | ------- | -----------
+access_token | Present | The token received in the returned MFA that you are answering for
+product | 'auth' or 'connect' | The product you used when you received a response requesting MFA
 answer | Present unless 'mask' or 'type' are present | Answer to the MFA
 mask | Present unless 'answer' or 'type' are present | MFA device selection based on device mask
 type | Present unless 'mask' or 'answer' are present | The bank password
@@ -769,19 +844,25 @@ curl -X PUT "...v1/users/me/accounts"
 ```json
 {
   "general":[
-    "Missing parameter. Options are one or more of: \"source\", \"deposit\", \"tracking\""
+    "Missing parameter. Options are one or more of: 'source', 'deposit', 'tracking'",
+    "User is not yet verified with Dwolla"
   ],
   "source":[
     "Account not found",
-    "is incorrectly formatted - must be of type String"
+    "is incorrectly formatted - must be of type String",
+    "type must be one of: savings, checking",
+    "must have Plaid Auth product"
   ],
   "deposit":[
     "Account not found",
-    "is incorrectly formatted - must be of type String"
+    "is incorrectly formatted - must be of type String",
+    "type must be one of: savings, checking",
+    "must have Plaid Auth product"
   ],
   "tracking":[
     "Account not found",
-    "is incorrectly formatted - must be of type Array"
+    "is incorrectly formatted - must be of type Array",
+    "Account with ID <account id> must have Plaid Connect product"
   ]
 }
 ```
@@ -791,6 +872,8 @@ After acquiring all of the user's bank accounts, they need to specify which Acco
 To specify which Accounts to track, pass in an array `tracking[]` that contains the ID of each Account you want to track. To specify an Account to deduct money into each week, pass in the key `deposit` with the ID of the Account as its value. Similarly, for the Account to deduct money from, use the `source` key.
 
 You may use this route do set multiple Accounts at once. For example, you can track multiple Accounts and add the source/deposit Accounts all in one call. This route is also idempotent, meaning that adding Accounts as source/deposit/tracking multiple times will not have any adverse effects. Similarly, passing in a new source/deposit Account will override the previous ones. Passing in a new tracking Account will add it to the array of Accounts to track. If instead you wish to remove a tracking Account, use the `DELETE` REST call for this same route. For more information on deleting Accounts, see the relevant section in the documentation.
+
+To add a source or deposit account, the User must already be authenticated with Dwolla (via the `POST users/me/dwolla` route) and the Account must be authenticated with the Plaid Auth product (if the Account already has the Connect product, it must be upgraded using the `POST users/me/plaid_upgrade` route). To add a tracking account, the Account must be authenticated with the Plaid Connect product (if the Account already has the Auth product, it must be upgraded using the `POST users/me/plaid_upgrade` route).
 
 ### HTTP Request
 
@@ -875,6 +958,152 @@ Parameter | Validations | Description
 source | None | Remove the User's source Account
 deposit | None | Remove the User's deposit Account
 accounts[] | Array | IDs for Accounts you wish to stop tracking
+
+## Create Dwolla Customer
+
+```shell
+curl -X POST "...v1/users/me/dwolla"
+  -d "ssn=123-45-6789&address[line1]=..."
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
+  "fname":"Cash",
+  "lname":"Money",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "transactions_refreshed_at":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
+  "phone":"5555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "dwolla_status":"verified",
+  "dwolla_verified_at":"2016-02-19T11:24:33.873-08:00",
+  "accounts":["..."],
+  "address":"...",
+  "agexes":["..."],
+  "deposit_account":"...",
+  "fund":"...",
+  "source_account":"...",
+  "transactions":["..."],
+  "vices":["..."],
+  "yearly_funds":["..."]
+}
+```
+
+> Validation errors
+
+```json
+{
+  "ssn":[
+    "is required"
+  ],
+  "address":[
+    "is required"
+  ]
+}
+```
+
+Use this route to create a Dwolla Customer object for the authed User. A Dwolla Customer is required to perform any transactions between accounts, as a Dwolla Funding Source (bank account) needs to be attached to an existing Dwolla Customer. Because we use Plaid, Dwolla funding sources are automatically verified. However, this is not true for Customers, which need to be verified using a physical address, SSN, and IP address. The IP address is determined based on the IP address that made the server call, but the SSN and physical address must be passed in as parameters to this endpoint. One exception is that if the authenticated User already has a stored Address, that address will be used if the `address` parameter is missing from the payload. If the `address` parameter is present regardless, that information will be used to update the User's stored Address.
+
+Note that while the SSN is passed in as `ssn`, an address field is passed in as `address[line1]`, etc. Also note that while the address is saved on the server, the SSN is merely passed to Dwolla and forgotten at the end of the server call.
+
+This call will return the user model, complete with their Dwolla Customer status `dwolla_status`. This will be equal to one of the following statuses:
+
+Status | Resolution
+------ | -----------
+verified | No further action necessary
+retry | Must resubmit information, either due to typo or misinformation
+document | Must submit image of passport, driver's license or ID card
+suspended | No further action possible via server, must contact Dwolla
+
+The `retry` status can be resolved by using this same route by passing in the extra parameter `retry=true` and entering correct information.
+
+The `document` status must be resolved by making a `POST` call to the `...v1/users/me/dwolla_document` route with an image of the user's identification as well as the type of that identification. The image must be in one of the following file formats: `.jpg`, `.jpeg`, `.png`, `.tif`, or `.pdf`. The type can be one of: `passport`, `license`, or `idCard`.
+
+### HTTP Request
+
+`POST ...v1/users/me/dwolla`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+ssn | Present  | Social security number
+address[line1] | Present  | The street address
+address[line2] | Optional | Second line for street address, for things like apartment numbers
+address[city]  | Present  | The city
+address[state] | Present  | The state
+address[zip]   | Present  | The postal code
+retry | Optional | Whether the client is retrying Dwolla verification
+
+## Submit Dwolla Document
+
+```shell
+curl -X POST "...v1/users/me/dwolla_document"
+  -d "type=license"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
+  "fname":"Cash",
+  "lname":"Money",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "transactions_refreshed_at":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
+  "phone":"5555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "dwolla_status":"document",
+  "dwolla_verified_at":null,
+  "accounts":["..."],
+  "address":"...",
+  "agexes":["..."],
+  "deposit_account":"...",
+  "fund":"...",
+  "source_account":"...",
+  "transactions":["..."],
+  "vices":["..."],
+  "yearly_funds":["..."]
+}
+```
+
+> Validation errors
+
+```json
+{
+  "file":[
+    "is required"
+  ],
+  "document":[
+    "is required"
+  ]
+}
+```
+
+Use this route to submit an identifying document to verify a Dwolla Customer. This is required if the client has previously called the `POST ...v1/users/me/dwolla` route and received a `User.dwolla_status` of `document`. The document image must be in one of the following file formats: `.jpg`, `.jpeg`, `.png`, `.tif`, or `.pdf`. The document type must be one of: `passport`, `license`, or `idCard`.
+
+### HTTP Request
+
+`POST ...v1/users/me/dwolla_document`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+file | formatted as jpg, jpeg, png, tif, or pdf | Image of identifying document
+type | 'passport', 'license', or 'idCard'  | The type of identification
 
 ## Refresh Transactions
 
@@ -968,150 +1197,6 @@ To associate a given device with an FCM Group, you must obtain an FCM device reg
 ### HTTP Request
 
 `POST ...v1/users/me/register_push_token`
-
-## Create Dwolla Customer
-
-```shell
-curl -X POST "...v1/users/me/dwolla"
-  -d "ssn=123-45-6789&address[line1]=..."
-  -H "Authorization: TOKEN"
-```
-
-> Successful response:
-
-```json
-{
-  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
-  "fname":"Cash",
-  "lname":"Money",
-  "email":"cashmoney@gmail.com",
-  "dob":"1990-01-20",
-  "invest_percent":10,
-  "transactions_refreshed_at":"2016-02-19T11:24:33.873-08:00",
-  "goal":420,
-  "phone":"5555552016",
-  "created_at":"2016-02-19T11:24:33.873-08:00",
-  "updated_at":"2016-02-19T11:24:33.873-08:00",
-  "dwolla_status":"verified",
-  "accounts":["..."],
-  "address":"...",
-  "agexes":["..."],
-  "deposit_account":"...",
-  "fund":"...",
-  "source_account":"...",
-  "transactions":["..."],
-  "vices":["..."],
-  "yearly_funds":["..."]
-}
-```
-
-> Validation errors
-
-```json
-{
-  "ssn":[
-    "is required"
-  ],
-  "address":[
-    "is required"
-  ]
-}
-```
-
-Use this route to create a Dwolla Customer object for the authed User. A Dwolla Customer is required to perform any transactions between accounts, as a Dwolla Funding Source (bank account) needs to be attached to an existing Dwolla Customer. Because we use Plaid, Dwolla funding sources are automatically verified. However, this is not true for Customers, which need to be verified using a physical address, SSN, and IP address. The IP address is determined based on the IP address that made the server call, but the SSN and physical address must be passed in as parameters to this endpoint. One exception is that if the authenticated User already has a stored Address, that address will be used if the `address` parameter is missing from the payload. If the `address` parameter is present regardless, that information will be used to update the User's stored Address.
-
-Note that while the SSN is passed in as `ssn`, an address field is passed in as `address[line1]`, etc. Also note that while the address is saved on the server, the SSN is merely passed to Dwolla and forgotten at the end of the server call.
-
-This call will return the user model, complete with their Dwolla Customer status `dwolla_status`. This will be equal to one of the following statuses:
-
-Status | Resolution
------- | -----------
-verified | No further action necessary
-retry | Must resubmit information, either due to typo or misinformation
-document | Must submit image of passport, driver's license or ID card
-suspended | No further action possible via server, must contact Dwolla
-
-The `retry` status can be resolved by using this same route by passing in the extra parameter `retry=true` and entering correct information.
-
-The `document` status must be resolved by making a `POST` call to the `...v1/users/me/dwolla_document` route with an image of the user's identification as well as the type of that identification. The image must be in one of the following file formats: `.jpg`, `.jpeg`, `.png`, `.tif`, or `.pdf`. The type can be one of: `passport`, `license`, or `idCard`.
-
-### HTTP Request
-
-`POST ...v1/users/me/dwolla`
-
-### URL Parameters
-
-Parameter | Validations | Description
---------- | ----------- | -----------
-ssn | Present  | Social security number
-address[line1] | Present  | The street address
-address[line2] | Optional | Second line for street address, for things like apartment numbers
-address[city]  | Present  | The city
-address[state] | Present  | The state
-address[zip]   | Present  | The postal code
-retry | Optional | Whether the client is retrying Dwolla verification
-
-## Submit Dwolla Document
-
-```shell
-curl -X POST "...v1/users/me/dwolla_document"
-  -d "type=license"
-  -H "Authorization: TOKEN"
-```
-
-> Successful response:
-
-```json
-{
-  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
-  "fname":"Cash",
-  "lname":"Money",
-  "email":"cashmoney@gmail.com",
-  "dob":"1990-01-20",
-  "invest_percent":10,
-  "transactions_refreshed_at":"2016-02-19T11:24:33.873-08:00",
-  "goal":420,
-  "phone":"5555552016",
-  "created_at":"2016-02-19T11:24:33.873-08:00",
-  "updated_at":"2016-02-19T11:24:33.873-08:00",
-  "dwolla_status":"document",
-  "accounts":["..."],
-  "address":"...",
-  "agexes":["..."],
-  "deposit_account":"...",
-  "fund":"...",
-  "source_account":"...",
-  "transactions":["..."],
-  "vices":["..."],
-  "yearly_funds":["..."]
-}
-```
-
-> Validation errors
-
-```json
-{
-  "file":[
-    "is required"
-  ],
-  "document":[
-    "is required"
-  ]
-}
-```
-
-Use this route to submit an identifying document to verify a Dwolla Customer. This is required if the client has previously called the `POST ...v1/users/me/dwolla` route and received a `User.dwolla_status` of `document`. The document image must be in one of the following file formats: `.jpg`, `.jpeg`, `.png`, `.tif`, or `.pdf`. The document type must be one of: `passport`, `license`, or `idCard`.
-
-### HTTP Request
-
-`POST ...v1/users/me/dwolla_document`
-
-### URL Parameters
-
-Parameter | Validations | Description
---------- | ----------- | -----------
-file | formatted as jpg, jpeg, png, tif, or pdf | Image of identifying document
-type | 'passport', 'license', or 'idCard'  | The type of identification
 
 ## Send Slack Support Ticket
 

@@ -14,7 +14,7 @@ Behind the scenes, archiving is simply the act of setting a boolean flag, but th
 ## Back Out
 
 ```shell
-curl _X POST "...v1/transactions/:id/back_out"
+curl _X POST "...v1/transactions/9bf4...aa4a/back_out"
   -H "Authorization: TOKEN"
 ```
 
@@ -63,7 +63,7 @@ Parameter | Description
 ## Restore
 
 ```shell
-curl _X POST "...v1/transactions/:id/restore"
+curl _X POST "...v1/transactions/9bf4...aa4a/restore"
   -H "Authorization: TOKEN"
 ```
 
