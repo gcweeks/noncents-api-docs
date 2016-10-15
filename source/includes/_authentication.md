@@ -34,6 +34,7 @@ curl -X GET "...v1/auth?
   "created_at":"2016-02-19T11:24:33.873-08:00",
   "updated_at":"2016-02-19T11:24:33.873-08:00",
   "dwolla_status":"verified",
+  "dwolla_verified_at":"2016-02-19T11:24:33.873-08:00",
   "accounts":["..."],
   "address":"...",
   "agexes":["..."],

@@ -20,3 +20,7 @@ build/
 _yardoc
 doc/
 .idea/
+
+# Text editor files
+.tags
+
