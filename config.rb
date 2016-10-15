@@ -1,3 +1,5 @@
+ignore '.tags'
+
 # Markdown
 set :markdown_engine, :redcarpet
 set :markdown,
