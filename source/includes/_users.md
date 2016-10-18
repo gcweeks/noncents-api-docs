@@ -490,7 +490,10 @@ curl -X POST "...v1/users/me/plaid"
       "tracking":false,
       "bank_id":"e780c643-5006-4730-8055-383ae8e97978",
       "created_at":"2016-02-19T11:24:33.873-08:00",
-      "updated_at":"2016-02-19T11:24:33.873-08:00"
+      "updated_at":"2016-02-19T11:24:33.873-08:00",
+      "account_num_short":"1234",
+			"plaid_auth":false,
+			"plaid_connect":true
     },
     "..."
   ],
@@ -817,7 +820,10 @@ curl -X PUT "...v1/users/me/accounts"
     "tracking":false,
     "bank_id":"e780c643-5006-4730-8055-383ae8e97978",
     "created_at":"2016-02-19T11:24:33.873-08:00",
-    "updated_at":"2016-02-19T11:24:33.873-08:00"
+    "updated_at":"2016-02-19T11:24:33.873-08:00",
+    "account_num_short":"1234",
+    "plaid_auth":true,
+    "plaid_connect":true
   },
   "fund":"...",
   "source_account":{
@@ -831,7 +837,10 @@ curl -X PUT "...v1/users/me/accounts"
     "tracking":true,
     "bank_id":"e780c643-5006-4730-8055-383ae8e97978",
     "created_at":"2016-02-19T11:24:33.873-08:00",
-    "updated_at":"2016-02-19T11:24:33.873-08:00"
+    "updated_at":"2016-02-19T11:24:33.873-08:00",
+    "account_num_short":"5678",
+    "plaid_auth":true,
+    "plaid_connect":true
   },
   "transactions":["..."],
   "vices":["..."],
@@ -1265,7 +1274,10 @@ curl -X POST "...v1/users/me/dev_populate"
       "tracking":false,
       "bank_id":"e780c643-5006-4730-8055-383ae8e97978",
       "created_at":"2016-02-19T11:24:33.873-08:00",
-      "updated_at":"2016-02-19T11:24:33.873-08:00"
+      "updated_at":"2016-02-19T11:24:33.873-08:00",
+      "account_num_short":"1234",
+			"plaid_auth":true,
+			"plaid_connect":true
     }
     "..."
   ],
@@ -1481,9 +1493,9 @@ curl -X POST "...v1/users/me/dev_notify"
 {
   "to":"user_1",
   "data":{
-    "hello": "world",
-    "fname": "Cash",
-    "lname": "Money"
+    "hello":"world",
+    "fname":"Cash",
+    "lname":"Money"
   }
 }
 ```
