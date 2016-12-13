@@ -438,7 +438,7 @@ When the server returns a User whose Address has not been set, the JSON will not
 
 ### HTTP Request
 
-`POST ...v1/users/me/address`
+`PUT ...v1/users/me/address`
 
 ### URL Parameters
 
@@ -449,6 +449,61 @@ address[line2] | Optional | Second line for street address, for things like apar
 address[city]  | Present  | The city
 address[state] | Present  | The state
 address[zip]   | Present  | The postal code
+
+## Set Monthly Feeling
+
+```shell
+curl -X PUT "...v1/users/me/feeling"
+  -d "month=2016-12-01&feeling=2"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+[
+  {
+    "feeling": 2,
+    "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
+    "amount":"230.72",
+    "month":"2016-02-01",
+    "created_at":"2016-02-19T11:24:33.873-08:00",
+    "updated_at":"2016-02-19T11:24:33.873-08:00",
+    "vice":"Electronics"
+  },
+  "..."
+]
+```
+
+> Validation errors
+
+```json
+{
+  "month":[
+    "is required",
+    "must be in format YYYY-MM-DD"
+  ],
+  "feeling":[
+    "is required",
+    "must be a number between 0 and 3"
+  ]
+}
+```
+
+Sets the User's feeling about their monthly spending by setting a "feeling" field on each Agex associated with that month. If there are no Agexes for the chosen month, this route will do nothing and return a 200.
+
+The feeling is represented by a number from 0 to 3. '0' represents no feeling, and is the default value when an Agex is created. '1' through '3' represent the User's feeling about the current month: Bad (1), Okay (2), and Good (3).
+
+### HTTP Request
+
+`PUT ...v1/users/me/feeling`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+month | String in the form of YYYY-MM-DD | Month for which feeling applies
+feeling | Integer between 0 and 3 | Integer represent User's feeling
 
 ## Create Plaid Account
 
@@ -1444,6 +1499,7 @@ curl -X POST "...v1/users/me/dev_aggregate"
   "address":"...",
   "agexes":[
     {
+      "feeling": 2,
       "id":"9bf406fc-cc64-45e2-b536-df9f1b0caa4a",
       "amount":"230.72",
       "month":"2016-02-01",
