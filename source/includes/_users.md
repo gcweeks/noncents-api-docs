@@ -485,14 +485,14 @@ curl -X PUT "...v1/users/me/feeling"
   ],
   "feeling":[
     "is required",
-    "must be a number between 0 and 3"
+    "must be a number between 0 and 5"
   ]
 }
 ```
 
 Sets the User's feeling about their monthly spending by setting a "feeling" field on each Agex associated with that month. If there are no Agexes for the chosen month, this route will do nothing and return a 200.
 
-The feeling is represented by a number from 0 to 3. '0' represents no feeling, and is the default value when an Agex is created. '1' through '3' represent the User's feeling about the current month: Bad (1), Okay (2), and Good (3).
+The feeling is represented by a number from 0 to 3. '0' represents no feeling, and is the default value when an Agex is created. '1' through '5' represent the User's feeling about the current month. For example, Bad (1), Okay (3), and Great (5).
 
 ### HTTP Request
 
@@ -503,7 +503,7 @@ The feeling is represented by a number from 0 to 3. '0' represents no feeling, a
 Parameter | Validations | Description
 --------- | ----------- | -----------
 month | String in the form of YYYY-MM-DD | Month for which feeling applies
-feeling | Integer between 0 and 3 | Integer represent User's feeling
+feeling | Integer between 0 and 5 | Integer represent User's feeling
 
 ## Create Plaid Account
 
