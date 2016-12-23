@@ -547,8 +547,9 @@ curl -X POST "...v1/users/me/plaid"
       "created_at":"2016-02-19T11:24:33.873-08:00",
       "updated_at":"2016-02-19T11:24:33.873-08:00",
       "account_num_short":"1234",
-			"plaid_auth":false,
-			"plaid_connect":true
+      "plaid_auth":false,
+      "plaid_connect":true,
+      "plaid_needs_reauth":false
     },
     "..."
   ],
@@ -833,6 +834,102 @@ answer | Present unless 'mask' or 'type' are present | Answer to the MFA
 mask | Present unless 'answer' or 'type' are present | MFA device selection based on device mask
 type | Present unless 'mask' or 'answer' are present | The bank password
 
+## Update Plaid Credentials
+
+```shell
+curl -X PUT "...v1/users/me/plaid_upgrade"
+  -d "username=cashmoney&
+      password=Ca5hM0ney&
+      bank_id=3dce9...2a4d3"
+  -H "Authorization: TOKEN"
+```
+
+> Successful response:
+
+```json
+{
+  "id":"7d966671-e36e-5f42-8ed4-fb56cf2f2768",
+  "fname":"Cash",
+  "lname":"Money",
+  "email":"cashmoney@gmail.com",
+  "dob":"1990-01-20",
+  "invest_percent":10,
+  "transactions_refreshed_at":"2016-02-19T11:24:33.873-08:00",
+  "goal":420,
+  "phone":"5555552016",
+  "created_at":"2016-02-19T11:24:33.873-08:00",
+  "updated_at":"2016-02-19T11:24:33.873-08:00",
+  "dwolla_status":"verified",
+  "dwolla_verified_at":"2016-02-19T11:24:33.873-08:00",
+  "accounts":[
+    {
+      "id":"3dce9e2f-5321-431d-bd67-9ab3db32a4d3",
+      "name":"Plaid Savings",
+      "institution":"fake_institution",
+      "available_balance":null,
+      "current_balance":null,
+      "account_type":"depository",
+      "account_subtype":"savings",
+      "tracking":false,
+      "bank_id":"e780c643-5006-4730-8055-383ae8e97978",
+      "created_at":"2016-02-19T11:24:33.873-08:00",
+      "updated_at":"2016-02-19T11:24:33.873-08:00",
+      "account_num_short":"1234",
+      "plaid_auth":false,
+      "plaid_connect":true,
+      "plaid_needs_reauth":false
+    },
+    "..."
+  ],
+  "address":"...",
+  "agexes":["..."],
+  "deposit_account":"...",
+  "fund":"...",
+  "source_account":"...",
+  "transactions":["..."],
+  "vices":["..."],
+  "yearly_funds":["..."]
+}
+```
+
+> Validation errors
+
+```json
+{
+  "username":[
+    "is required"
+  ],
+  "password":[
+    "is required"
+  ],
+  "pin":[
+    "is required for usaa"
+  ],
+  "bank_id":[
+    "is required"
+  ],
+  "general":[
+    "Bank not in need of update",
+    "Bank cannot be updated"
+  ]
+}
+```
+
+When a user changes their password or MFA credentials with a financial institution or is locked out of their account, they must update their credentials with Plaid as well. This route allows the user to re-enter their credentials. To see if a user needs to re-enter their credentials, look through the User's Accounts and check the `Account.plaid_needs_reauth` flag. If set to true, the Bank designated by the `Account.bank_id` field needs to be re-authenticated. Provide the username, password (and pin if USAA bank), and Bank ID to this route to provide Plaid with the new credentials.
+
+### HTTP Request
+
+`PUT ...v1/users/me/plaid_update`
+
+### URL Parameters
+
+Parameter | Validations | Description
+--------- | ----------- | -----------
+username | Present | The bank username
+password | Present | The bank password
+pin | usaa only | The bank pin
+bank_id | Present | The ID for the Bank in question
+
 ## Set Accounts
 
 ```shell
@@ -878,7 +975,8 @@ curl -X PUT "...v1/users/me/accounts"
     "updated_at":"2016-02-19T11:24:33.873-08:00",
     "account_num_short":"1234",
     "plaid_auth":true,
-    "plaid_connect":true
+    "plaid_connect":true,
+    "plaid_needs_reauth":false
   },
   "fund":"...",
   "source_account":{
@@ -895,7 +993,8 @@ curl -X PUT "...v1/users/me/accounts"
     "updated_at":"2016-02-19T11:24:33.873-08:00",
     "account_num_short":"5678",
     "plaid_auth":true,
-    "plaid_connect":true
+    "plaid_connect":true,
+    "plaid_needs_reauth":false
   },
   "transactions":["..."],
   "vices":["..."],
@@ -1331,8 +1430,9 @@ curl -X POST "...v1/users/me/dev_populate"
       "created_at":"2016-02-19T11:24:33.873-08:00",
       "updated_at":"2016-02-19T11:24:33.873-08:00",
       "account_num_short":"1234",
-			"plaid_auth":true,
-			"plaid_connect":true
+      "plaid_auth":true,
+      "plaid_connect":true,
+      "plaid_needs_reauth":false
     }
     "..."
   ],
